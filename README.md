@@ -1,5 +1,8 @@
 # R-package
 
+## New features
+Feel free to open a new issues if you have an idea for a feature!
+
 ## Basic functions
 
 >These functions are always:
