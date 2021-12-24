@@ -12,5 +12,5 @@ Feel free to open a new issues if you have an idea for a feature!
 
 
 - [ ] Read data file (& set correct working directory)
-- [ ] Anonymize data
+- [ ] Preprocessing: Anonymize data, ...
 - [ ] ...(TBC)
