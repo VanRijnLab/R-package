@@ -5,7 +5,7 @@ Feel free to open a new issues if you have an idea for a feature!
 
 ## Basic functions
 
->These functions are always:
+>These functions are always: 
 >
 >- Based on variables/columns that are always available in the data from the App version
 >- Returning both data and plot where needed
@@ -13,4 +13,4 @@ Feel free to open a new issues if you have an idea for a feature!
 
 - [ ] Read data file (& set correct working directory)
 - [ ] Preprocessing: Anonymize data, ...
-- [ ] ...(TBC)
+- [ ] (TBC)
