@@ -22,7 +22,7 @@
 | numberOfChoices  | Integer with how many choices the user for an answer | If the answer is not in a multiple-choice format this field will be 0. In the case of a study trial the field will also be 0.  |
 | lookAheadTime  | The amount of time the algoritm looks ahead in ms  | Default set at 15.000 ms: The model determines the activation of all items 15 seconds in the future and if the item with the lowest activation has an activation value below the forgetThreshold, that item will be scheduled for presentation. If all predicted activations are above the forgetThreshold, the model will introduce a new item.|
 | forgetThreshold  | Threshold below which the user forgets a fact | Default set at -0.8.  |
-| maxAlpha  | Maximal rate of forgetting  | Default set at 0.5. Even if the user has a very high RT, the alpha will never change more than 0.5 (?). |
+| maxAlpha  | Maximal rate of forgetting  | Default set at 0.5. |
 | minAlpha | Minimal rate of forgetting  | Default set at 0.15.  |
 | keyCode  |  ASCII numbers representing which keys were pressed on the keyboard when the user gave their answer  | Field is empty for multiple-choice questions or study trials (since no answer is typed).  |
 | keyCharacter  | Keys that were pressed corresponding to the keycodes |  Field is empty for multiple-choice questions or study trials (since no answer is typed). |
