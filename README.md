@@ -1,16 +1,11 @@
-# R-package
+# SlimStampeRData
+This R package helps with analysing data from the App-version of SlimStampen.
 
-## New features
-Feel free to open a new issues if you have an idea for a feature!
+## Planning
+Current and future functions and features are described [here](Planning.md).
 
-## Basic functions
+## Documentation
+ [here](Documentation.md).
 
->These functions are always: 
->
->- Based on variables/columns that are always available in the data from the App version
->- Returning both data and plot where needed
-
-
-- [ ] Read data file (& set correct working directory)
-- [ ] Preprocessing: Anonymize data, etc.
-- [ ] (TBC)
+## Something missing?
+Feel free to open a new issues if you see any mistakes in the documentation or have an idea for a feature!
