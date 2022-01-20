@@ -12,7 +12,7 @@
 #' y <- 0
 #' example_function(y)
 example_function <- function(x) {
-  if(x == 1){
+  if (x == 1) {
     print("Hello world!")
   }
 }
