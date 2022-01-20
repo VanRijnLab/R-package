@@ -5,6 +5,7 @@
 
 # Session Data files
 .RData
+.Rdata
 
 # User-specific files
 .Ruserdata
@@ -21,3 +22,5 @@
 # RStudio files
 .Rproj.user
 .Rproj.user/
+.httr-oauth
+.DS_Store
