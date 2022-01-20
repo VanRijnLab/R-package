@@ -1,8 +1,9 @@
 Package: SlimStampeRData
 Title: Analyze SlimStampen App Data
 Version: 0.0.0.9000
-Authors@R: 
-    person("Han", "Havinga", , "h.m.havinga@gmail.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Han", "Havinga", , "h.m.havinga@gmail.com", role = c("aut", "cre")),
+    person("SlimStampen", role = "cph"))
 Description: This package contains functions that help you analyze the data from the App-version of SlimStampen.
 License: GPL (>= 3)
 Encoding: UTF-8
