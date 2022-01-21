@@ -16,7 +16,5 @@ data frame
 Read the raw data set into a data frame
 }
 \examples{
-file <- data.csv
-read_dataset(file)
 
 }

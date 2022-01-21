@@ -6,8 +6,7 @@
 #' @export
 #'
 #' @examples
-#' file <- data.csv
-#' read_dataset(file)
+#'
 read_dataset <- function(file) {
   # readr::read_csv
 }
