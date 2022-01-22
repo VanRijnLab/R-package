@@ -5,6 +5,7 @@ Authors@R: c(
     person("Han", "Havinga", , "h.m.havinga@gmail.com", role = c("aut", "cre")),
     person("SlimStampen", role = "cph"))
 Description: This package contains functions that help you analyze the data from the App-version of SlimStampen.
+URL: https://github.com/VanRijnLab/SlimStampeRData
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
