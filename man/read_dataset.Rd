@@ -2,18 +2,19 @@
 % Please edit documentation in R/read_dataset.R
 \name{read_dataset}
 \alias{read_dataset}
-\title{Read the raw data set into a data frame}
+\title{Read dataset}
 \usage{
 read_dataset(file)
 }
 \arguments{
-\item{file}{data set file}
+\item{file}{A csv file.}
 }
 \value{
 data frame
 }
 \description{
-Read the raw data set into a data frame
+\code{read_dataset} reads the raw data set into a data frame with correct
+settings
 }
 \examples{
 
