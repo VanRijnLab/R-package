@@ -10,5 +10,5 @@
 #' @examples
 #'
 read_dataset <- function(file) {
-  # readr::read_csv
+  readr::read_csv(file)
 }
