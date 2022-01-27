@@ -16,6 +16,3 @@ data frame
 \code{read_dataset} reads the raw data set into a data frame with correct
 settings
 }
-\examples{
-
-}
