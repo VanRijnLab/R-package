@@ -8,5 +8,9 @@
 #' @export
 #'
 read_dataset <- function(file=system.file("extdata", "textcues_example.csv", package = "SlimStampeRData")) {
+  if(file == system.file("extdata", "textcues_example.csv", package = "SlimStampeRData")) {
+    message("Example dataset was used: textcues")
+  }
+
   data.table::fread(file)
 }
