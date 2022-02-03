@@ -4,14 +4,18 @@
 \alias{plot_RT_over_time}
 \title{Plot RT over time}
 \usage{
-plot_RT_over_time(data)
+plot_RT_over_time(data, sessionId = NULL, normalizeTime = TRUE)
 }
 \arguments{
-\item{data}{data frame}
+\item{data}{A data frame}
+
+\item{sessionId}{Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.}
+
+\item{normalizeTime}{If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.}
 }
 \value{
 data frame
 }
 \description{
-\code{plot_RT_over_time} plots the RT of one person of one session over time
+\code{plot_RT_over_time} plots the RT of one session over time
 }
