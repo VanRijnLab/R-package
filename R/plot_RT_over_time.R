@@ -5,7 +5,7 @@
 #' @return data frame
 #' @export
 plot_RT_over_time <- function(data) {
-  dat1 <- dplyr::filter(data, userId == 54911 & sessionId == "83f4d01f-805c-41b1-a677-56e08ec95576")
+  dat1 <- dplyr::filter(data, userId == 60168 & sessionId == "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6")
   dat2 <- dplyr::group_by(dat1, factId)
   #when sorted by person, session and factId
   dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)

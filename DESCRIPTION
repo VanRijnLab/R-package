@@ -17,4 +17,5 @@ Imports:
     magrittr,
     dplyr,
     readr,
-    ggplot2
+    ggplot2,
+    data.table

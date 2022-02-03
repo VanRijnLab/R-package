@@ -4,10 +4,12 @@
 \alias{read_dataset}
 \title{Read dataset}
 \usage{
-read_dataset(file)
+read_dataset(
+  file = system.file("extdata", "textcues_example.csv", package = "SlimStampeRData")
+)
 }
 \arguments{
-\item{file}{A csv file.}
+\item{file}{A csv file. If no file is provided the example .csv file will be loaded.}
 }
 \value{
 data frame
