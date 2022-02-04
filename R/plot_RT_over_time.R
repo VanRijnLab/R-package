@@ -4,11 +4,20 @@
 #' @param data A data frame
 #' @param sessionId Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.
 #' @param normalizeTime If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.
+#' @param xlim A vector of 2, indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).
+#' @param ylim A vector of 2, indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).
+#' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE) {
+plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
+  }
+  if(!(is.null(xlim) | length(xlim) == 2)){
+    stop("xlim must be a vector of 2")
+  }
+  if(!(is.null(ylim) | length(ylim) == 2)){
+    stop("ylim must be a vector of 2")
   }
 
   if(is.null(sessionId)){
@@ -41,6 +50,17 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE) {
     sdRT <- sd(dat3$reactionTime)
     upperRT <- meanRT + (2*sdRT)
     lowerRT <- min(dat3$reactionTime)
+    if(is.null(xlim)){
+      x = c(0, maxTime)
+    } else {
+      x = xlim
+    }
+    if(is.null(ylim)){
+      y = c(lowerRT, upperRT)
+    } else {
+      y = ylim
+    }
+
 
     plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
@@ -50,10 +70,10 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE) {
       # ggplot2::scale_y_continuous(breaks = seq(100, 3100, 500), limits = c(100, 3100), minor_breaks = NULL) +
       ggplot2::scale_color_viridis_d() +
       ggplot2::scale_fill_viridis_d() +
-      ggplot2::coord_cartesian(xlim = c(0, maxTime), ylim = c(lowerRT, upperRT)) +
+      ggplot2::coord_cartesian(xlim = x, ylim = y) +
       ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)")
     title <- paste("Plot", i,".pdf")
-    ggplot2::ggsave(title, plot = plot, path = "C:/Users/Hanna/OneDrive/Documenten/Werk/SlimStampen/Package R/Figures")
+    ggplot2::ggsave(title, plot = plot, path = filepath)
 
   }
   plot

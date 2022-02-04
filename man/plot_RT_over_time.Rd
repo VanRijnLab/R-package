@@ -4,7 +4,14 @@
 \alias{plot_RT_over_time}
 \title{Plot RT over time}
 \usage{
-plot_RT_over_time(data, sessionId = NULL, normalizeTime = TRUE)
+plot_RT_over_time(
+  data,
+  sessionId = NULL,
+  normalizeTime = TRUE,
+  xlim = NULL,
+  ylim = NULL,
+  filepath = "../Figures"
+)
 }
 \arguments{
 \item{data}{A data frame}
@@ -12,6 +19,12 @@ plot_RT_over_time(data, sessionId = NULL, normalizeTime = TRUE)
 \item{sessionId}{Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.}
 
 \item{normalizeTime}{If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.}
+
+\item{xlim}{A vector of 2, indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).}
+
+\item{ylim}{A vector of 2, indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).}
+
+\item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
 data frame
