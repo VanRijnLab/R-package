@@ -32,7 +32,9 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
 
   # Change page layout if length(users) =< 2
   plot <- NULL
-  plots <- NULL
+  plots <- list()
+  # grDevices::pdf(file="../Figures/RT_plots.pdf")
+  # graphics::par(mfrow=c(2,2))
   for (i in seq_along(participants)) {
     dat1 <- dplyr::filter(data, sessionId == participants[i])
     dat3 <- NULL
@@ -61,6 +63,9 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
       y = ylim
     }
 
+    lesson <- unique(dat3$lessonTitle)
+    user <- unique(dat3$userId)
+    plotTitle <- paste("Lesson: ", lesson[1], ", User: ", user[1])
 
     plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
@@ -71,13 +76,19 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
       ggplot2::scale_color_viridis_d() +
       ggplot2::scale_fill_viridis_d() +
       ggplot2::coord_cartesian(xlim = x, ylim = y) +
-      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)")
+      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+      ggplot2::ggtitle(plotTitle)
     title <- paste("Plot", i,".pdf")
-    ggplot2::ggsave(title, plot = plot, path = filepath)
-
+    # ggsave(title, marrangeGrob(grobs = l, nrow=2, ncol=2),
+    #        device = "pdf")
+    # # ggplot2::ggsave(title, plot = plot, path = filepath)
+    plots[[i]] <- plot
+    # # plot
+    # print(plot)
   }
-  plot
-
+  ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
+         device = "pdf", path = filepath)
+  # grDevices::dev.off()
 
   # dat1 <- dplyr::filter(data, userId == 60168 & sessionId == "")
   # dat2 <- dplyr::group_by(dat1, factId)
