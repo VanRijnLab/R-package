@@ -47,7 +47,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
     # dat4 <- dplyr::mutate(dat3, reactionTime = reactionTime / 1000)  ReactionTime in seconds
     maxTime <- max(dat3$time)
     meanRT <- mean(dat3$reactionTime)
-    sdRT <- sd(dat3$reactionTime)
+    sdRT <- stats::sd(dat3$reactionTime)
     upperRT <- meanRT + (2*sdRT)
     lowerRT <- min(dat3$reactionTime)
     if(is.null(xlim)){

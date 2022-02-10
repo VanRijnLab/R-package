@@ -18,4 +18,6 @@ Imports:
     dplyr,
     readr,
     ggplot2,
-    data.table
+    data.table,
+    purrr,
+    stats
