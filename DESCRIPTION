@@ -23,4 +23,6 @@ Imports:
     stats,
     graphics,
     grDevices,
-    gridExtra
+    gridExtra,
+    cowplot,
+    viridis

@@ -14,15 +14,15 @@ plot_RT_over_time(
 )
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{A data frame. NA values will be removed before plotting.}
 
 \item{sessionId}{Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.}
 
 \item{normalizeTime}{If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.}
 
-\item{xlim}{A vector of 2, indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).}
+\item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).}
 
-\item{ylim}{A vector of 2, indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).}
+\item{ylim}{A vector of 2 (for example: c(0, 10)), indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).}
 
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
@@ -30,5 +30,5 @@ plot_RT_over_time(
 data frame
 }
 \description{
-\code{plot_RT_over_time} plots the RT of one session over time
+\code{plot_RT_over_time} plots the RT of one session over time.
 }

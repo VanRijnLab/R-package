@@ -1,11 +1,11 @@
 #' Plot RT over time
 #'
-#' \code{plot_RT_over_time} plots the RT of one session over time
-#' @param data A data frame
+#' \code{plot_RT_over_time} plots the RT of one session over time.
+#' @param data A data frame. NA values will be removed before plotting.
 #' @param sessionId Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.
 #' @param normalizeTime If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.
-#' @param xlim A vector of 2, indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).
-#' @param ylim A vector of 2, indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).
+#' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).
+#' @param ylim A vector of 2 (for example: c(0, 10)), indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
@@ -30,11 +30,34 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
     participants[1] <- sessionId
   }
 
-  # Change page layout if length(users) =< 2
   plot <- NULL
   plots <- list()
+  plots4 <- list()
+
+  maxTime <- max(data$sessionTime)/60000
+  meanRT <- mean(data$reactionTime)
+  sdRT <- stats::sd(data$reactionTime)
+  upperRT <- meanRT + (sdRT)
+  lowerRT <- min(data$reactionTime)
+  if(is.null(xlim)){
+    x = c(0, maxTime)
+  } else {
+    x = xlim
+  }
+  if(is.null(ylim)){
+    y = c(lowerRT, upperRT)
+  } else {
+    y = ylim
+  }
+
   # grDevices::pdf(file="../Figures/RT_plots.pdf")
   # graphics::par(mfrow=c(2,2))
+
+  facts <- unique(data$factId)
+  factcolor <- viridis::viridis(length(facts))
+  names(factcolor)  <- facts
+
+  cat("This may take a moment... \n")
   for (i in seq_along(participants)) {
     dat1 <- dplyr::filter(data, sessionId == participants[i])
     dat3 <- NULL
@@ -45,64 +68,40 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
     } else {
       dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
     }
-
-    # dat4 <- dplyr::mutate(dat3, reactionTime = reactionTime / 1000)  ReactionTime in seconds
-    maxTime <- max(dat3$time)
-    meanRT <- mean(dat3$reactionTime)
-    sdRT <- stats::sd(dat3$reactionTime)
-    upperRT <- meanRT + (2*sdRT)
-    lowerRT <- min(dat3$reactionTime)
-    if(is.null(xlim)){
-      x = c(0, maxTime)
-    } else {
-      x = xlim
-    }
-    if(is.null(ylim)){
-      y = c(lowerRT, upperRT)
-    } else {
-      y = ylim
-    }
-
+    # Make plot title
     lesson <- unique(dat3$lessonTitle)
     user <- unique(dat3$userId)
     plotTitle <- paste("Lesson: ", lesson[1], ", User: ", user[1])
 
+    # Make plot
     plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
       ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
+      # ggplot2::geom_point(data = dat3[which(dat3$factId == 61033),],
+      #                     ggplot2::aes(size = 1), colour = "red") +
       ggplot2::guides(colour = "none", fill = "none") +
-      # ggplot2::scale_x_continuous(breaks = seq(0, 2.6, 1), limits = c(0, 2.6), minor_breaks = NULL) +
-      # ggplot2::scale_y_continuous(breaks = seq(100, 3100, 500), limits = c(100, 3100), minor_breaks = NULL) +
       ggplot2::scale_color_viridis_d() +
-      ggplot2::scale_fill_viridis_d() +
+      ggplot2::scale_fill_manual(values = factcolor) +
       ggplot2::coord_cartesian(xlim = x, ylim = y) +
       ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
       ggplot2::ggtitle(plotTitle)
-    title <- paste("Plot", i,".pdf")
-    # ggsave(title, marrangeGrob(grobs = l, nrow=2, ncol=2),
-    #        device = "pdf")
-    # # ggplot2::ggsave(title, plot = plot, path = filepath)
     plots[[i]] <- plot
-    # # plot
+    if(i < 5){
+      plots4[[i]] <- plot
+    }
     # print(plot)
   }
-  ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
-         device = "pdf", path = filepath)
-  # grDevices::dev.off()
+  res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
 
-  # dat1 <- dplyr::filter(data, userId == 60168 & sessionId == "")
-  # dat2 <- dplyr::group_by(dat1, factId)
-  # #when sorted by person, session and factId
-  # dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
-  # # dat4 <- dplyr::mutate(dat3, reactionTime = reactionTime / 1000)  ReactionTime in seconds
-  #
-  # ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
-  #   ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
-  #   ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
-  #   ggplot2::guides(colour = "none", fill = "none") +
-  #   ggplot2::scale_x_continuous(breaks = seq(0, 2.6, 1), limits = c(0, 2.6), minor_breaks = NULL) +
-  #   ggplot2::scale_y_continuous(breaks = seq(100, 3100, 500), limits = c(100, 3100), minor_breaks = NULL) +
-  #   ggplot2::scale_color_viridis_d() +
-  #   ggplot2::scale_fill_viridis_d() +
-  #   ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)")
+  # Save all plots to a pdf file
+  date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm")
+  title <- paste("RT_over_time_", date, ".pdf")
+  ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
+         device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
+
+  cat("Preview of the first 4 plots are displayed in viewer. \n")
+  cat("PDF of plots can be found in: ", filepath)
+
+  # Display first 4 plots
+  return(res)
 }
