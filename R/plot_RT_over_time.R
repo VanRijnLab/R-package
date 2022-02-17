@@ -90,6 +90,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
       dat2 <- dplyr::group_by(dat1, factId)
       #when sorted by person, session and factId
       dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
+      dat3 <- dplyr::ungroup(dat3)
     } else {
       dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
     }
