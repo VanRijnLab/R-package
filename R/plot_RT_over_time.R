@@ -3,13 +3,13 @@
 #' \code{plot_RT_over_time} plots the RT of one session over time.
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param sessionId Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.
-#' @param normalizeTime If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.
+#' @param normalizeTime If TRUE, the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).
 #' @param ylim A vector of 2 (for example: c(0, 10)), indicating the range of the y-axis.If NULL the default value is used: c(min(RT), mean(RT) + (2*SD(RT))).
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -35,8 +35,8 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
   plots4 <- list()
 
   maxTime <- max(data$sessionTime)/60000
-  meanRT <- mean(data$reactionTime)
-  sdRT <- stats::sd(data$reactionTime)
+  meanRT <- mean(data$reactionTime, na.rm=TRUE)
+  sdRT <- stats::sd(data$reactionTime, na.rm=TRUE)
   upperRT <- meanRT + (sdRT)
   lowerRT <- min(data$reactionTime)
   if(is.null(xlim)){
@@ -100,7 +100,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = TRUE, xlim
          device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
   cat("Preview of the first 4 plots are displayed in viewer. \n")
-  cat("PDF of plots can be found in: ", filepath)
+  cat("PDF of plots can be found in: ", filepath, "\n")
 
   # Display first 4 plots
   return(res)
