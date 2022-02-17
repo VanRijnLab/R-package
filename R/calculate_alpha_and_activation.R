@@ -26,6 +26,7 @@ calculate_alpha_and_activation <- function(data) {
     datalistPar = list()
     dat1 <- dplyr::filter(data, sessionId == participants[j])
     facts <- unique(dat1$factId)
+    dat1 <- dplyr::arrange(.data = dat1, sessionTime)
     dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = defThreshold,
                           fact_id = factId, text = factText, start_time = sessionTime,
                           rt = reactionTime, correct = correct)

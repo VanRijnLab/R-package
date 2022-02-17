@@ -2,6 +2,7 @@
 
 export("%>%")
 export(calculate_alpha_and_activation)
+export(calculate_repetition)
 export(dataset_stats)
 export(example_function)
 export(plot_RT_over_time)

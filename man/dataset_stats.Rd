@@ -15,8 +15,9 @@ Three data frames ($general, $lessons, $participants)
 \description{
 \code{dataset_stats} describes several statistics regarding the data set,
 these are: Number of participants, number of unique facts, number of lessons,
-participants per lesson, lessons per participant and sessions per
-participant.
+number of unique user-fact combinations, participants per lesson, facts per
+lesson, unique user-fact combinations per lesson, lessons per participant and
+sessions per participant.
 }
 \details{
 The number of participants, number of unique facts, number of lessons and
