@@ -7,7 +7,7 @@
 plot_RT_over_time(
   data,
   sessionId = NULL,
-  normalizeTime = TRUE,
+  normalizeTime = FALSE,
   xlim = NULL,
   ylim = NULL,
   filepath = "../Figures"
@@ -18,7 +18,7 @@ plot_RT_over_time(
 
 \item{sessionId}{Provide a single sessionId string to plot that session. If sessionId is NULL all sessions will be plotted.}
 
-\item{normalizeTime}{If TRUE (the default), the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.}
+\item{normalizeTime}{If TRUE, the times of all facts will be normalized (they will start at 0). If FALSE, the times will not be normalized and data points will occur relative to their occurrence during the session.}
 
 \item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of the x-axis.If NULL the default value is used: c(0, max(time)).}
 
