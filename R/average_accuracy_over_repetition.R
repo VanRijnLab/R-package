@@ -22,12 +22,21 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
     stop("No repetition column is provided in the data, run calculate_repetition()
          to add a repetition column to the data")
   }
-
   if(!(is.null(xlim) | length(xlim) == 2)){
     stop("xlim must be a vector of 2")
   }
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
+  }
+  indx <- apply(data, 2, function(x) any(is.na(x)))
+  if("repetition" %in% colnames(data)[indx]){
+    cat("! There are missing values in the column repetition. \n")
+  }
+  if("sessionId" %in% colnames(data)[indx]){
+    cat("! There are missing values in the column sessionId. \n")
+  }
+  if("correct" %in% colnames(data)[indx]){
+    cat("! There are missing values in the column correct. \n")
   }
 
   participants <- unique(data$sessionId)
