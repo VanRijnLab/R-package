@@ -1,7 +1,8 @@
 set_x <- function(column, xlim) {
   maxTime <- max(column)
+  minTime <- min(column)
   if(is.null(xlim)){
-    x = c(1, maxTime)
+    x = c(minTime, maxTime)
   } else {
     x = xlim
   }

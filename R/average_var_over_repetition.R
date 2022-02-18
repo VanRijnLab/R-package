@@ -41,7 +41,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
   dat2 <- dplyr::summarise(.data = dat1, mean_RT = mean(reactionTime, na.rm=TRUE))
 
-  x = set_x(data$repetition, xlim)
+  x = xlim
   y = set_y(data$reactionTime, ylim)
 
   # Make plot
@@ -112,14 +112,15 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
   dat2 <- dplyr::summarise(.data = dat1, mean_alpha = mean(alpha, na.rm=TRUE))
 
-  if(is.null(ylim)){
-    upperRT <- max(dat2$mean_alpha)
-    lowerRT <- min(dat2$mean_alpha)
-    y = c(lowerRT, upperRT)
-  } else {
-    y = ylim
-  }
-  x = set_x(data$repetition, xlim)
+  # if(is.null(ylim)){
+  #   upperRT <- max(dat2$mean_alpha)
+  #   lowerRT <- min(dat2$mean_alpha)
+  #   y = c(lowerRT, upperRT)
+  # } else {
+  #   y = ylim
+  # }
+  y = ylim
+  x = xlim
 
   # Make plot
   plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_alpha, group = sessionId)) +
@@ -177,7 +178,16 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
   participants <- unique(data$sessionId)
   plot <- NULL
 
-  x = set_x(data$repetition, xlim)
+  # x = set_x(data$repetition, xlim)
+  # maxTime <- max(column)
+  # print(maxTime)
+  # # minTime <- min(column)
+  # if(is.null(xlim)){
+  #   x = c(0, 1)
+  # } else {
+  #   x = xlim
+  # }
+  x = xlim
   if(is.null(ylim)){
     y = c(0, 1)
   } else {
