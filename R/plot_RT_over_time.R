@@ -27,19 +27,8 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  indx <- apply(data, 2, function(x) any(is.na(x)))
-  if("reactionTime" %in% colnames(data)[indx]){
-    cat("! There are missing values in the column reactionTime. \n")
-  }
-  if("sessionTime" %in% colnames(data)[indx]){
-    cat("! There are missing values in the column sessionTime. \n")
-  }
-  if("factId" %in% colnames(data)[indx]){
-    cat("! There are missing values in the column factId. \n")
-  }
-  if("correct" %in% colnames(data)[indx]){
-    cat("! There are missing values in the column correct. \n")
-  }
+
+  missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
 
   if(is.null(sessionId)){
     participants <- unique(data$sessionId)
@@ -56,24 +45,15 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   plots4 <- list()
 
   maxTime <- max(data$sessionTime)/60000
-  meanRT <- mean(data$reactionTime, na.rm=TRUE)
-  sdRT <- stats::sd(data$reactionTime, na.rm=TRUE)
-  upperRT <- meanRT + (sdRT)
-  lowerRT <- min(data$reactionTime)
   if(is.null(xlim)){
     x = c(0, maxTime)
   } else {
     x = xlim
   }
-  if(is.null(ylim)){
-    y = c(lowerRT, upperRT)
-  } else {
-    y = ylim
-  }
+  y = set_y(data$reactionTime, ylim)
 
   facts <- unique(data$factId)
   factcolor <- viridis::turbo(length(facts))
-  # factcolor <- grDevices::rainbow(length(facts))
   names(factcolor)  <- facts
 
   corrections <- unique(data$correct)
