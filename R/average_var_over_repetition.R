@@ -29,7 +29,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
     stop("ylim must be a vector of 2")
   }
 
-  SlimStampeRData::missing_values_message(data, c("sessionId", "reactionTime", "repetition"))
+  missing_values_message(data, c("sessionId", "reactionTime", "repetition"))
 
   participants <- unique(data$sessionId)
   plot <- NULL
@@ -41,8 +41,8 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
   dat2 <- dplyr::summarise(.data = dat1, mean_RT = mean(reactionTime, na.rm=TRUE))
 
-  x = SlimStampeRData::set_x(data$repetition, xlim)
-  y = SlimStampeRData::set_y(data$reactionTime, ylim)
+  x = set_x(data$repetition, xlim)
+  y = set_y(data$reactionTime, ylim)
 
   # Make plot
   plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_RT, group = sessionId)) +
@@ -100,7 +100,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
     stop("ylim must be a vector of 2")
   }
 
-  SlimStampeRData::missing_values_message(data, c("sessionId", "alpha", "repetition"))
+  missing_values_message(data, c("sessionId", "alpha", "repetition"))
 
   participants <- unique(data$sessionId)
   plot <- NULL
@@ -119,7 +119,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
   } else {
     y = ylim
   }
-  x = SlimStampeRData::set_x(data$repetition, xlim)
+  x = set_x(data$repetition, xlim)
 
   # Make plot
   plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_alpha, group = sessionId)) +
@@ -172,13 +172,17 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
     stop("ylim must be a vector of 2")
   }
 
-  SlimStampeRData::missing_values_message(data, c("sessionId", "correct", "repetition"))
+  missing_values_message(data, c("sessionId", "correct", "repetition"))
 
   participants <- unique(data$sessionId)
   plot <- NULL
 
-  x = SlimStampeRData::set_x(data$repetition, xlim)
-  y = SlimStampeRData::set_y(data$correct, ylim)
+  x = set_x(data$repetition, xlim)
+  if(is.null(ylim)){
+    y = c(0, 1)
+  } else {
+    y = ylim
+  }
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Accuracy over repetition")
