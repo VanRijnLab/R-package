@@ -23,7 +23,7 @@ calculate_repetition <- function(data) {
     dat1 <- dplyr::arrange(.data = dat1, sessionTime)
     for (i in seq_along(facts)) {
       datfact <- dplyr::filter(dat1, factId == facts[i])
-      datfact <- dplyr::mutate(.data = datfact, repetition = 1:dplyr::n())
+      datfact <- dplyr::mutate(.data = datfact, repetition = 0:(dplyr::n()-1))
       datalistPar[[i]] <- datfact
     }
     datParticipant <- data.table::rbindlist(datalistPar)
