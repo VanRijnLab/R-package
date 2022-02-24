@@ -265,7 +265,7 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
   plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_alpha, group = factId)) +
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
-    ggplot2::geom_point(data = dat5, alpha = 0.5, size = 3, position = ggplot2::position_jitter(w = 0.05, h = 0), ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
+    ggplot2::geom_point(data = dat5, alpha = 0.5, size = 3, position = ggplot2::position_jitter(w = 0.08, h = 0), ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
     ggplot2::scale_color_manual(name="Facts", values = factcolor, breaks=dat5$factId) +
     ggplot2::guides(fill = "none") +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
