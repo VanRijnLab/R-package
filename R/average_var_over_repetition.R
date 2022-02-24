@@ -219,7 +219,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
 #'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
-#'   the y-axis.If NULL the default value is used: c(0, 1).
+#'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
@@ -241,7 +241,7 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
     stop("ylim must be a vector of 2")
   }
 
-  missing_values_message(data, c("sessionId", "alpha", "repetition"))
+  missing_values_message(data, c("sessionId", "alpha", "repetition", "factId"))
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Average ROF for every fact over repetition")
@@ -254,6 +254,9 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
   # Group by sessionId and repetition, then mean alpha as new column
   dat1 <- dplyr::group_by(.data = data, factId, repetition)
   dat2 <- dplyr::summarise(.data = dat1, mean_alpha = mean(alpha, na.rm=TRUE))
+  dat3 <- dplyr::group_by(.data = dat2, factId)
+  dat4 <- dplyr::filter(.data = dat3, repetition == max(repetition))
+  dat5 <- dat4[order(dat4$mean_alpha, decreasing = TRUE),]
 
   y = ylim
   x = xlim
@@ -262,8 +265,9 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
   plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_alpha, group = factId)) +
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
-    ggplot2::guides(colour = "none", fill = "none") +
-    ggplot2::scale_color_manual(values = factcolor) +
+    ggplot2::geom_point(data = dat5, alpha = 0.5, size = 3, position = ggplot2::position_jitter(w = 0.05, h = 0), ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
+    ggplot2::scale_color_manual(name="Facts", values = factcolor, breaks=dat5$factId) +
+    ggplot2::guides(fill = "none") +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
     ggplot2::ggtitle(plotTitle)
