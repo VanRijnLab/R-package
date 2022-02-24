@@ -24,11 +24,13 @@ will start at 0). If FALSE, the times will not be normalized and data
 points will occur relative to their occurrence during the session.}
 
 \item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of
-the x-axis.If NULL the default value is used: c(0, max(time)).}
+the x-axis.If NULL the default value is used: c(0, z). Where z is the max
+time.}
 
 \item{ylim}{A vector of 2 (for example: c(0, 10)), indicating the range of
-the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
-(2*SD(RT))).}
+the y-axis.If NULL the default value is used: c(a, b). Where a is the
+minimum reaction time and b is the average reaction time plus the standard
+deviation of the reaction time.}
 
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
