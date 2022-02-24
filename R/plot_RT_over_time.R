@@ -33,7 +33,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
 
   if(is.null(sessionId)){
-    participants <- unique(data$sessionId)
+    participants <- sort(unique(data$sessionId))
   } else {
     if(!(is.character(sessionId) & length(sessionId) == 1)){
       stop("SessionId is not a string")
@@ -54,7 +54,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   }
   y = set_y(data$reactionTime, ylim)
 
-  facts <- unique(data$factId)
+  facts <- sort(unique(data$factId))
   factcolor <- viridis::turbo(length(facts))
   names(factcolor)  <- facts
 

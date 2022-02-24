@@ -33,7 +33,7 @@ plot_ROF_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xl
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "correct", "alpha"))
 
   if(is.null(sessionId)){
-    participants <- unique(data$sessionId)
+    participants <- sort(unique(data$sessionId))
   } else {
     if(!(is.character(sessionId) & length(sessionId) == 1)){
       stop("SessionId is not a string")
@@ -58,7 +58,7 @@ plot_ROF_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xl
     y = ylim
   }
 
-  facts <- unique(data$factId)
+  facts <- sort(unique(data$factId))
   factcolor <- viridis::turbo(length(facts))
   names(factcolor)  <- facts
 

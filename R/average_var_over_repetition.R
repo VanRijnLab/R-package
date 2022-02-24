@@ -31,11 +31,13 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
 
   missing_values_message(data, c("sessionId", "reactionTime", "repetition"))
 
-  participants <- unique(data$sessionId)
-  plot <- NULL
+  participants <- sort(unique(data$sessionId))
+  partcolor <- viridis::turbo(length(participants))
+  names(partcolor)  <- participants
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Average RT for every participant over repetition")
+  plot <- NULL
 
   # Group by sessionId and repetition, then mean reaction time as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
@@ -49,7 +51,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(sessionId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(sessionId), fill = factor(sessionId))) +
     ggplot2::guides(colour = "none", fill = "none") +
-    ggplot2::scale_color_viridis_d() +
+    ggplot2::scale_color_manual(values = partcolor) +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Reaction Time (ms)") +
     ggplot2::ggtitle(plotTitle)
@@ -100,11 +102,13 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
 
   missing_values_message(data, c("sessionId", "alpha", "repetition"))
 
-  participants <- unique(data$sessionId)
-  plot <- NULL
+  participants <- sort(unique(data$sessionId))
+  partcolor <- viridis::turbo(length(participants))
+  names(partcolor)  <- participants
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Average ROF for every participant over repetition")
+  plot <- NULL
 
   # Group by sessionId and repetition, then mean alpha as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
@@ -118,7 +122,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(sessionId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(sessionId), fill = factor(sessionId))) +
     ggplot2::guides(colour = "none", fill = "none") +
-    ggplot2::scale_color_viridis_d() +
+    ggplot2::scale_color_manual(values = partcolor) +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
     ggplot2::ggtitle(plotTitle)
@@ -164,8 +168,10 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 
   missing_values_message(data, c("sessionId", "correct", "repetition"))
 
-  participants <- unique(data$sessionId)
-  plot <- NULL
+  participants <- sort(unique(data$sessionId))
+  partcolor <- viridis::turbo(length(participants))
+  names(partcolor)  <- participants
+
 
   x = xlim
   if(is.null(ylim)){
@@ -176,6 +182,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Average Accuracy for every participant over repetition")
+  plot <- NULL
 
   # Group by sessionId and repetition, then mean accuracy as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
@@ -186,7 +193,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(sessionId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(sessionId), fill = factor(sessionId))) +
     ggplot2::guides(colour = "none", fill = "none") +
-    ggplot2::scale_color_viridis_d() +
+    ggplot2::scale_color_manual(values = partcolor) +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Accuracy") +
     ggplot2::ggtitle(plotTitle)
@@ -236,13 +243,11 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
 
   missing_values_message(data, c("sessionId", "alpha", "repetition"))
 
-  participants <- unique(data$sessionId)
-  plot <- NULL
-
   cat("This may take a moment... \n")
   plotTitle <- paste("Average ROF for every fact over repetition")
+  plot <- NULL
 
-  facts <- unique(data$factId)
+  facts <- sort(unique(data$factId))
   factcolor <- viridis::turbo(length(facts))
   names(factcolor)  <- facts
 
