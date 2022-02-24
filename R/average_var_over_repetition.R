@@ -70,7 +70,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
 #' Plots the average rate of forgetting of every session over the repetitions of the facts.
 #'
 #' Assumes that the dataset has a repetition column with fact repetition in
-#' integers
+#' integers and a column with the alpha's for all observations
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
@@ -201,4 +201,75 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
   return(plot)
 }
 
+#' Plot average rate of forgetting over repetitions for each fact
+#'
+#' Plots the average rate of forgetting for each fact over the repetitions of the facts.
+#'
+#' Assumes that the dataset has a repetition column with fact repetition in
+#' integers and a column with the alpha's for all observations
+#'
+#' @param data A data frame. NA values will be removed before plotting.
+#' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
+#'   the x-axis.If NULL the default value is used.
+#' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
+#'   the y-axis.If NULL the default value is used: c(0, 1).
+#' @param filepath A relative or explicit path where plots will be saved
+#' @return data frame
+#' @export
+av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+  if(missing(data)){
+    stop("No data is provided")
+  }
+  if(!("repetition" %in% colnames(data))){
+    stop("No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data")
+  }
+  if(!("alpha" %in% colnames(data))){
+    stop("No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data")
+  }
+
+  if(!(is.null(xlim) | length(xlim) == 2)){
+    stop("xlim must be a vector of 2")
+  }
+  if(!(is.null(ylim) | length(ylim) == 2)){
+    stop("ylim must be a vector of 2")
+  }
+
+  missing_values_message(data, c("sessionId", "alpha", "repetition"))
+
+  participants <- unique(data$sessionId)
+  plot <- NULL
+
+  cat("This may take a moment... \n")
+  plotTitle <- paste("Average ROF for every fact over repetition")
+
+  facts <- unique(data$factId)
+  factcolor <- viridis::turbo(length(facts))
+  names(factcolor)  <- facts
+
+  # Group by sessionId and repetition, then mean alpha as new column
+  dat1 <- dplyr::group_by(.data = data, factId, repetition)
+  dat2 <- dplyr::summarise(.data = dat1, mean_alpha = mean(alpha, na.rm=TRUE))
+
+  y = ylim
+  x = xlim
+
+  # Make plot
+  plot <- ggplot2::ggplot(data = dat2, ggplot2::aes(x = factor(repetition), y = mean_alpha, group = factId)) +
+    ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+    ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
+    ggplot2::guides(colour = "none", fill = "none") +
+    ggplot2::scale_color_manual(values = factcolor) +
+    ggplot2::coord_cartesian(xlim = x, ylim = y) +
+    ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
+    ggplot2::ggtitle(plotTitle)
+
+  # Save all plots to a pdf file
+  title <- paste("av_ROF_repetition_fact_", title_time(), ".pdf")
+  ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
+
+  cat("PDF of plot can be found in: ", filepath, "\n")
+
+  # Display plot in viewer
+  return(plot)
+}
 
