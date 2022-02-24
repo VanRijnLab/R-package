@@ -210,10 +210,18 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 
 #' Plot average rate of forgetting over repetitions for each fact
 #'
-#' Plots the average rate of forgetting for each fact over the repetitions of the facts.
+#' Plots the average rate of forgetting for each fact over the repetitions of
+#' the facts.
 #'
 #' Assumes that the dataset has a repetition column with fact repetition in
-#' integers and a column with the alpha's for all observations
+#' integers and a column with the alpha's for all observations.
+#'
+#' The legend is given in the order of the average alpha for the last repetition
+#' of each fact. If there is more than one column (if there are too many facts
+#' to fit in one column), the columns should be read one-by-one. The upper-left
+#' value is the highest last alpha, the lower- right value is the lowest last
+#' alpha. All last alpha's are also marker by a bigger marker in the plot. Be
+#' aware that lines/markers may sometimes overlap.
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
