@@ -62,11 +62,6 @@ plot_ROF_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xl
   factcolor <- viridis::turbo(length(facts))
   names(factcolor)  <- facts
 
-  corrections <- unique(data$correct)
-  corcolor <- c("grey", "red")
-  names(corcolor)  <- corrections
-
-
   cat("This may take a moment... \n")
   for (i in seq_along(participants)) {
     dat1 <- dplyr::filter(data, sessionId == participants[i])
@@ -90,7 +85,7 @@ plot_ROF_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xl
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
       ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
       ggplot2::guides(colour = "none", fill = "none") +
-      ggplot2::scale_fill_manual(values = corcolor) +
+      ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
       ggplot2::scale_color_manual(values = factcolor) +
       ggplot2::coord_cartesian(xlim = x, ylim = y) +
       ggplot2::labs(x = "Time (minutes)", y = "Alpha") +
