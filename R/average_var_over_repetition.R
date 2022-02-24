@@ -35,7 +35,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
   plot <- NULL
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("RT over repetition")
+  plotTitle <- paste("Average RT for every participant over repetition")
 
   # Group by sessionId and repetition, then mean reaction time as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
@@ -105,7 +105,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
   plot <- NULL
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("ROF over repetition")
+  plotTitle <- paste("Average ROF for every participant over repetition")
 
   # Group by sessionId and repetition, then mean alpha as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
@@ -177,7 +177,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
   }
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("Accuracy over repetition")
+  plotTitle <- paste("Average Accuracy for every participant over repetition")
 
   # Group by sessionId and repetition, then mean accuracy as new column
   dat1 <- dplyr::group_by(.data = data, sessionId, repetition)
