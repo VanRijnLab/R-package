@@ -7,7 +7,7 @@
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the x-axis.If NULL the default value is used: c(0, max(repetition)).
+#'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
 #'   (SD(RT))).
@@ -75,10 +75,9 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the x-axis.If NULL the default value is used: c(0, max(repetition)).
+#'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
-#'   the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
-#'   (SD(RT))).
+#'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
@@ -145,10 +144,9 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the x-axis.If NULL the default value is used: c(0, max(repetition)).
+#'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
-#'   the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
-#'   (SD(RT))).
+#'   the y-axis.If NULL the default value is used: c(0, 1).
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
