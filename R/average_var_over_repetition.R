@@ -55,8 +55,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm")
-  title <- paste("Average_RT_over_repetition_", date, ".pdf")
+  title <- paste("Average_RT_over_repetition_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")
@@ -125,8 +124,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm")
-  title <- paste("Average_ROF_over_repetition_", date, ".pdf")
+  title <- paste("Average_ROF_over_repetition_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")
@@ -194,8 +192,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm")
-  title <- paste("Average_accuracy_over_repetition_", date, ".pdf")
+  title <- paste("Average_accuracy_over_repetition_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")

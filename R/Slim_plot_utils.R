@@ -30,3 +30,7 @@ missing_values_message <- function(data, columns) {
     }
   }
 }
+
+title_time <- function() {
+  return (format(Sys.time(), "%d-%b-%Y %Hh%Mm%Ss"))
+}

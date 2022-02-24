@@ -99,8 +99,8 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
 
   # Save all plots to a pdf file
-  date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm")
-  title <- paste("RT_over_time_", date, ".pdf")
+  # date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm%Ss")
+  title <- paste("RT_over_time_", title_time(), ".pdf")
   ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
          device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
