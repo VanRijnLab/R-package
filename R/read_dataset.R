@@ -12,5 +12,14 @@ read_dataset <- function(file=system.file("extdata", "textcues_example.csv", pac
     message("Example dataset was used: textcues")
   }
 
-  data.table::fread(file)
+  data <- data.table::fread(file)
+  cols <- c("factId", "userId", "sessionTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
+            "factText", "alpha")
+  missingcol <- missing_columns_check(data, cols)
+  # MaxAlpha, MinAlpha and lookAheadTime to be added depending on function change
+
+  if(length(missingcol) >= 0){
+    stop("One or more of these columns is missing: ", cols)
+  }
+  return(data)
 }
