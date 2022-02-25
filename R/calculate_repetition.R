@@ -11,6 +11,10 @@ calculate_repetition <- function(data) {
   if(missing(data)){
     stop("No data is provided")
   }
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime"))
+  if(length(missingcol) >= 0){
+    stop("No ", missingcol[[1]] ," column is provided in the data")
+  }
   cat("This may take a moment... \n")
 
   participants <- unique(data$sessionId)

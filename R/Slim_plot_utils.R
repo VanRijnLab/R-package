@@ -31,6 +31,17 @@ missing_values_message <- function(data, columns) {
   }
 }
 
+missing_columns_check <- function(data, columns) {
+  missingcols <- character(0)
+  for(col in columns){
+    if(!(col %in% colnames(data))){
+      missingcols[[1]] <- col
+    }
+  }
+  return(missingcols)
+}
+
+
 title_time <- function() {
   return (format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss"))
 }

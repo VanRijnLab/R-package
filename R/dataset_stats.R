@@ -21,6 +21,11 @@ dataset_stats <- function(data) {
   if(missing(data)){
     stop("No data is provided")
   }
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "userId", "reactionTime", "lessonId", "correct", "lessonTitle"))
+  if(length(missingcol) >= 0){
+    stop("No ", missingcol[[1]] ," column is provided in the data")
+  }
+
   participants = unique(data$userId)
   nrparticipants = length(participants)
 
