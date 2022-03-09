@@ -39,11 +39,15 @@ dataset_stats <- function(data) {
   partPerLesson = integer(0)
   factsPerLesson = integer(0)
   userfactsPerLesson = integer(0)
+  RTPerLesson = integer(0)
+  AccPerLesson = integer(0)
   for (i in seq_along(lessons)) {
     dat1 <- dplyr::filter(data, lessonTitle == lessons[i])
     partPerLesson[i] <- length(unique(dat1$userId))
     factsPerLesson[i] <- length(unique(dat1$factId))
     userfactsPerLesson[i] <- dplyr::n_distinct(paste(dat1$factId, dat1$userId))
+    RTPerLesson[i] <- mean(dat1$reactionTime, na.rm=TRUE)
+    AccPerLesson[i] <- mean(dat1$correct, na.rm=TRUE)
   }
   sessionPerPart = integer(0)
   lessonPerPart = integer(0)
@@ -58,7 +62,7 @@ dataset_stats <- function(data) {
   out$general <- data.frame(descriptives = c("Total participants", "Total facts", "Total lessons", "Fact-user combinations"),
                    values = c(nrparticipants, nrfacts, nrlessons, nrfactsuser))
   out$lessons <- data.frame(lessons = lessons,
-                    participants = partPerLesson, facts = factsPerLesson, user_facts = userfactsPerLesson)
+                    participants = partPerLesson, facts = factsPerLesson, user_facts = userfactsPerLesson, RT = RTPerLesson, accuracy = AccPerLesson)
   out$participants <- data.frame(participant = participants,
                     sessions = sessionPerPart, lessons = lessonPerPart, facts = factsPerPart)
   cat("General stats ($general): \n")
