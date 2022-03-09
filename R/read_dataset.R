@@ -19,9 +19,23 @@ read_dataset <- function(file=system.file("extdata", "textcues_example.csv", pac
   # MaxAlpha, MinAlpha and lookAheadTime to be added depending on function change
 
   if(length(missingcol) > 0){
-    cat("One or more of these columns is missing: ", cols,"\n Some of the funcions in this package may not work if these columns are not provided")
+    strCols <- paste(cols,collapse=" ")
+    warning("One or more of these columns is missing: ", strCols,"\n Some of the funcions in this package may not work if these columns are not provided")
   }
-  # Add separate message for alpha and repetition
+
+  # Separate messages for alpha and repetition
+  colsalpha <- c("alpha")
+  missingalpha <- missing_columns_check(data, colsalpha)
+  if(length(missingalpha) > 0){
+    cat("! No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data \n")
+  }
+
+  colsrep <- c("repetition")
+  missingrep <- missing_columns_check(data, colsrep)
+  if(length(missingrep) > 0){
+    cat("! No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data \n")
+  }
+
 
   return(data)
 }
