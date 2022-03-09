@@ -14,12 +14,14 @@ read_dataset <- function(file=system.file("extdata", "textcues_example.csv", pac
 
   data <- data.table::fread(file)
   cols <- c("factId", "userId", "sessionTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
-            "factText", "alpha")
+            "factText")
   missingcol <- missing_columns_check(data, cols)
   # MaxAlpha, MinAlpha and lookAheadTime to be added depending on function change
 
-  if(length(missingcol) >= 0){
-    stop("One or more of these columns is missing: ", cols)
+  if(length(missingcol) > 0){
+    cat("One or more of these columns is missing: ", cols,"\n Some of the funcions in this package may not work if these columns are not provided")
   }
+  # Add separate message for alpha and repetition
+
   return(data)
 }

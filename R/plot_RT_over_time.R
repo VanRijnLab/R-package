@@ -31,7 +31,7 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   }
 
   missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))

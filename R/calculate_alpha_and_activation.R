@@ -13,7 +13,7 @@ calculate_alpha_and_activation <- function(data) {
     stop("No data is provided")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
   missing_values_message(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))

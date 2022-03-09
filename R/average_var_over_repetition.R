@@ -22,7 +22,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
     stop("No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "reactionTime", "repetition"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
@@ -97,7 +97,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
     stop("No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
@@ -174,7 +174,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
     stop("ylim must be a vector of 2")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
@@ -261,7 +261,7 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
     stop("ylim must be a vector of 2")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 

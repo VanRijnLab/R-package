@@ -30,7 +30,7 @@ plot_ROF_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xl
     stop("ylim must be a vector of 2")
   }
   missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "alpha", "correct"))
-  if(length(missingcol) >= 0){
+  if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
