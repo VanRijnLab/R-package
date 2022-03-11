@@ -236,6 +236,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 #' aware that lines/markers may sometimes overlap.
 #'
 #' @param data A data frame. NA values will be removed before plotting.
+#' @param factNames Column that shows the names of the facts (like factText or factAnswer). Default shows factId.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
 #'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
@@ -243,7 +244,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+av_ROF_rep_fact <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -260,7 +261,7 @@ av_ROF_rep_fact <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figur
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId"))
+  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", factNames))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }

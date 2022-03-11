@@ -4,10 +4,18 @@
 \alias{av_ROF_rep_fact}
 \title{Plot average rate of forgetting over repetitions for each fact}
 \usage{
-av_ROF_rep_fact(data, xlim = NULL, ylim = NULL, filepath = "../Figures")
+av_ROF_rep_fact(
+  data,
+  factNames = "factId",
+  xlim = NULL,
+  ylim = NULL,
+  filepath = "../Figures"
+)
 }
 \arguments{
 \item{data}{A data frame. NA values will be removed before plotting.}
+
+\item{factNames}{Column that shows the names of the facts (like factText or factAnswer). Default shows factId.}
 
 \item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of
 the x-axis.If NULL the default value is used.}
