@@ -4,10 +4,24 @@
 \alias{calculate_alpha_and_activation}
 \title{Calculate fact activation and alpha (rate of forgetting)}
 \usage{
-calculate_alpha_and_activation(data)
+calculate_alpha_and_activation(
+  data,
+  minAlpha = 0.15,
+  maxAlpha = 0.5,
+  fThreshold = -0.8,
+  standardAlpha = 0.3
+)
 }
 \arguments{
 \item{data}{A data frame}
+
+\item{minAlpha}{The minimum value that the alpha can be}
+
+\item{maxAlpha}{The maximum value that the alpha can be}
+
+\item{fThreshold}{Threshold below which the user forgets a fact}
+
+\item{standardAlpha}{The default alpha that all items start with}
 }
 \value{
 Original data frame with columns for activation and alpha

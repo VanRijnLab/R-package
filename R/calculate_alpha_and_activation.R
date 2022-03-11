@@ -4,11 +4,16 @@
 #' override existing columns called 'alpha' or 'activation'.
 #'
 #' @param data A data frame
+#' @param minAlpha The minimum value that the alpha can be
+#' @param maxAlpha The maximum value that the alpha can be
+#' @param fThreshold Threshold below which the user forgets a fact
+#' @param standardAlpha The default alpha that all items start with
 #'
 #' @return Original data frame with columns for activation and alpha
 #' @export
 #'
-calculate_alpha_and_activation <- function(data) {
+calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
+                                           maxAlpha = 0.5, fThreshold = -0.8, standardAlpha = 0.3) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -18,11 +23,7 @@ calculate_alpha_and_activation <- function(data) {
   }
   missing_values_message(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
   cat("This may take a moment... \n")
-  # default values
-  minAlpha = 0.15
-  maxAlpha = 0.5
-  defThreshold = -0.8
-  standardAlpha = 0.3
+
 
   participants <- unique(data$sessionId)
   datalistTotal = list()
@@ -32,7 +33,7 @@ calculate_alpha_and_activation <- function(data) {
     dat1 <- dplyr::filter(data, sessionId == participants[j])
     facts <- unique(dat1$factId)
     dat1 <- dplyr::arrange(.data = dat1, sessionTime)
-    dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = defThreshold,
+    dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
                           fact_id = factId, text = factText, start_time = sessionTime,
                           rt = reactionTime, correct = correct)
     for (i in seq_along(facts)) {
