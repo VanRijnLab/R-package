@@ -1,6 +1,6 @@
-#' Plot RT over time
+#' Plot ROF for all Facts for all Participants over Time
 #'
-#' \code{plot_RT_over_time} plots the RT of one session over time. Incorrect
+#' \code{individual_ROF} plots the rate of forgetting (alpha) of one session over time. Incorrect
 #' answers are denotes with a red marker.
 #'
 #' @param data A data frame. NA values will be removed before plotting.
@@ -10,18 +10,18 @@
 #'   will start at 0). If FALSE, the times will not be normalized and data
 #'   points will occur relative to their occurrence during the session.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the x-axis.If NULL the default value is used: c(0, z). Where z is the max
-#'   time.
+#'   the x-axis.If NULL the default value is used: c(0, z). Where z is the max time.
 #' @param ylim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the y-axis.If NULL the default value is used: c(a, b). Where a is the
-#'   minimum reaction time and b is the average reaction time plus the standard
-#'   deviation of the reaction time.
+#'   the y-axis.If NULL the default value is used: c(0.10, 0.5).
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
+  }
+  if(!("alpha" %in% colnames(data))){
+    stop("No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data")
   }
   if(!(is.null(xlim) | length(xlim) == 2)){
     stop("xlim must be a vector of 2")
@@ -29,12 +29,12 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "alpha", "correct"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
-  missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
+
+  missing_values_message(data, c("sessionId", "factId", "sessionTime", "correct", "alpha"))
 
   if(is.null(sessionId)){
     participants <- sort(unique(data$sessionId))
@@ -56,7 +56,11 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
   } else {
     x = xlim
   }
-  y = set_y(data$reactionTime, ylim)
+  if(is.null(ylim)){
+    y = c(0.10, 0.5)
+  } else {
+    y = ylim
+  }
 
   facts <- sort(unique(data$factId))
   factcolor <- viridis::turbo(length(facts))
@@ -81,15 +85,14 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
     plotTitle <- paste("Lesson: ", lesson[1], ", User: ", user[1])
 
     # Make plot
-    plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
+    plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = alpha)) +
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
       ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
       ggplot2::guides(colour = "none", fill = "none") +
-      # ggplot2::guides(colour = "none") +
       ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
       ggplot2::scale_color_manual(values = factcolor) +
       ggplot2::coord_cartesian(xlim = x, ylim = y) +
-      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+      ggplot2::labs(x = "Time (minutes)", y = "Alpha") +
       ggplot2::ggtitle(plotTitle)
     plots[[i]] <- plot
     if(i < 5){
@@ -100,9 +103,9 @@ plot_RT_over_time <- function(data, sessionId = NULL, normalizeTime = FALSE, xli
 
   # Save all plots to a pdf file
   # date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm%Ss")
-  title <- paste("RT_over_time_", title_time(), ".pdf")
+  title <- paste("ROF_over_time_", title_time(), ".pdf")
   ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
-         device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
+                  device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
   cat("Preview of the first 4 plots are displayed in viewer. \n")
   cat("PDF of plots can be found in: ", filepath, "\n")

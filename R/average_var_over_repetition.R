@@ -14,7 +14,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -86,7 +86,7 @@ average_RT_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath 
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -160,7 +160,7 @@ average_ROF_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -244,7 +244,7 @@ average_accuracy_over_repetition <- function(data, xlim = NULL, ylim = NULL, fil
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return data frame
 #' @export
-av_ROF_rep_fact <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
     stop("No data is provided")
   }
