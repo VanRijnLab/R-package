@@ -228,8 +228,8 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 
 #' Plot average rate of forgetting over repetitions for each fact
 #'
-#' Plots the average rate of forgetting (alpha) for each fact over the repetitions of
-#' the facts.
+#' Plots the average rate of forgetting (alpha) for each fact over the
+#' repetitions of the facts.
 #'
 #' Assumes that the data set has a repetition column with fact repetition in
 #' integers and a column with the alpha's for all observations.
@@ -241,16 +241,25 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 #' alpha. All last alpha's are also marker by a bigger marker in the plot. Be
 #' aware that lines/markers may sometimes overlap.
 #'
+#' The parameter factNames allows you to choose which column should be used to
+#' label the facts. Beware that for some data sets only a limited amount of
+#' columns will provide labels for all facts. For example, in a data set in
+#' which factText and fileName are both used, these columns are likely to not
+#' provide labels for all facts. In this case using the column factAnswer
+#' instead may be useful.
+#'
 #' @family average functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
-#' @param factNames Column that shows the names of the facts (like factText or factAnswer). Default shows factId.
+#' @param factNames Column that shows the names of the facts (like factText or
+#'   factAnswer). Default shows factId.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
 #'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return Plot of Alpha over repetition, with every line a fact and a pdf file in filepath
+#' @return Plot of Alpha over repetition, with every line a fact and a pdf file
+#'   in filepath
 #' @export
 average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
