@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_dataset.R
 \name{read_dataset}
 \alias{read_dataset}
-\title{Read dataset}
+\title{Read data set}
 \usage{
 read_dataset(
   file = system.file("extdata", "textcues_example.csv", package = "SlimStampeRData")

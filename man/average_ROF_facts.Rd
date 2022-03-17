@@ -26,14 +26,14 @@ the y-axis.If NULL the default value is used.}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+Plot of Alpha over repetition, with every line a fact and a pdf file in filepath
 }
 \description{
-Plots the average rate of forgetting for each fact over the repetitions of
+Plots the average rate of forgetting (alpha) for each fact over the repetitions of
 the facts.
 }
 \details{
-Assumes that the dataset has a repetition column with fact repetition in
+Assumes that the data set has a repetition column with fact repetition in
 integers and a column with the alpha's for all observations.
 
 The legend is given in the order of the average alpha for the last repetition
@@ -43,3 +43,10 @@ value is the highest last alpha, the lower- right value is the lowest last
 alpha. All last alpha's are also marker by a bigger marker in the plot. Be
 aware that lines/markers may sometimes overlap.
 }
+\seealso{
+Other average functions: 
+\code{\link{average_ROF_participants}()},
+\code{\link{average_RT_participants}()},
+\code{\link{average_accuracy_participants}()}
+}
+\concept{average functions}

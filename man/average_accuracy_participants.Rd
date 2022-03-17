@@ -2,7 +2,7 @@
 % Please edit documentation in R/average_var_over_repetition.R
 \name{average_accuracy_participants}
 \alias{average_accuracy_participants}
-\title{Plot average accuracy over repetitions}
+\title{Plot average accuracy of all participants over repetitions}
 \usage{
 average_accuracy_participants(
   data,
@@ -23,12 +23,19 @@ the y-axis.If NULL the default value is used: c(0, 1).}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+Plot of accuracy over repetition, with every line a participant and a pdf file in filepath
 }
 \description{
 Plots the average accuracy of every session over the repetitions of the facts.
 }
 \details{
-Assumes that the dataset has a repetition column with fact repetition in
+Assumes that the data set has a repetition column with fact repetition in
 integers
 }
+\seealso{
+Other average functions: 
+\code{\link{average_ROF_facts}()},
+\code{\link{average_ROF_participants}()},
+\code{\link{average_RT_participants}()}
+}
+\concept{average functions}

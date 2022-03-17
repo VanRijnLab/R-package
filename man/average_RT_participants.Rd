@@ -2,7 +2,7 @@
 % Please edit documentation in R/average_var_over_repetition.R
 \name{average_RT_participants}
 \alias{average_RT_participants}
-\title{Plot average RT over repetitions}
+\title{Plot average RT of all participants over repetitions}
 \usage{
 average_RT_participants(
   data,
@@ -24,12 +24,19 @@ the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+Plot of RT over repetition, with every line a participant and a pdf file in filepath
 }
 \description{
 Plots the average RT of every session over the repetitions of the facts.
 }
 \details{
-Assumes that the dataset has a repetition column with fact repetition in
+Assumes that the data set has a repetition column with fact repetition in
 integers
 }
+\seealso{
+Other average functions: 
+\code{\link{average_ROF_facts}()},
+\code{\link{average_ROF_participants}()},
+\code{\link{average_accuracy_participants}()}
+}
+\concept{average functions}

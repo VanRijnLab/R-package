@@ -1,7 +1,9 @@
 #' Plot ROF for all Facts for all Participants over Time
 #'
-#' \code{individual_ROF} plots the rate of forgetting (alpha) of one session over time. Incorrect
-#' answers are denotes with a red marker.
+#' \code{individual_ROF} plots the rate of forgetting (alpha) of all sessions
+#' over time. Incorrect answers are denoted with a red marker.
+#'
+#' @family individual functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param sessionId Provide a single sessionId string to plot that session. If
@@ -10,11 +12,12 @@
 #'   will start at 0). If FALSE, the times will not be normalized and data
 #'   points will occur relative to their occurrence during the session.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
-#'   the x-axis.If NULL the default value is used: c(0, z). Where z is the max time.
+#'   the x-axis.If NULL the default value is used: c(0, z). Where z is the max
+#'   time.
 #' @param ylim A vector of 2 (for example: c(0, 10)), indicating the range of
 #'   the y-axis.If NULL the default value is used: c(0.10, 0.5).
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
 individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){

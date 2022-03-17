@@ -35,9 +35,14 @@ deviation of the reaction time.}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+A preview plot in the viewer and a pdf file in filepath
 }
 \description{
-\code{individual_RT} plots the RT of one session over time. Incorrect
-answers are denotes with a red marker.
+\code{individual_RT} plots the RT of all sessions over time. Incorrect
+answers are denoted with a red marker.
 }
+\seealso{
+Other individual functions: 
+\code{\link{individual_ROF}()}
+}
+\concept{individual functions}

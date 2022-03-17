@@ -24,7 +24,8 @@ will start at 0). If FALSE, the times will not be normalized and data
 points will occur relative to their occurrence during the session.}
 
 \item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of
-the x-axis.If NULL the default value is used: c(0, z). Where z is the max time.}
+the x-axis.If NULL the default value is used: c(0, z). Where z is the max
+time.}
 
 \item{ylim}{A vector of 2 (for example: c(0, 10)), indicating the range of
 the y-axis.If NULL the default value is used: c(0.10, 0.5).}
@@ -32,9 +33,14 @@ the y-axis.If NULL the default value is used: c(0.10, 0.5).}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+A preview plot in the viewer and a pdf file in filepath
 }
 \description{
-\code{individual_ROF} plots the rate of forgetting (alpha) of one session over time. Incorrect
-answers are denotes with a red marker.
+\code{individual_ROF} plots the rate of forgetting (alpha) of all sessions
+over time. Incorrect answers are denoted with a red marker.
 }
+\seealso{
+Other individual functions: 
+\code{\link{individual_RT}()}
+}
+\concept{individual functions}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/average_var_over_repetition.R
 \name{average_ROF_participants}
 \alias{average_ROF_participants}
-\title{Plot average rate of forgetting over repetitions}
+\title{Plot average rate of forgetting of all participants over repetitions}
 \usage{
 average_ROF_participants(
   data,
@@ -23,12 +23,19 @@ the y-axis.If NULL the default value is used.}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-data frame
+Plot of Alpha over repetition, with every line a participant and a pdf file in filepath
 }
 \description{
-Plots the average rate of forgetting of every session over the repetitions of the facts.
+Plots the average rate of forgetting (alpha) of every session over the repetitions of the facts.
 }
 \details{
-Assumes that the dataset has a repetition column with fact repetition in
+Assumes that the data set has a repetition column with fact repetition in
 integers and a column with the alpha's for all observations
 }
+\seealso{
+Other average functions: 
+\code{\link{average_ROF_facts}()},
+\code{\link{average_RT_participants}()},
+\code{\link{average_accuracy_participants}()}
+}
+\concept{average functions}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dataset_stats.R
 \name{dataset_stats}
 \alias{dataset_stats}
-\title{Descriptive statistics about the data set}
+\title{Descriptive specifications about the data set}
 \usage{
 dataset_stats(data)
 }
@@ -13,16 +13,18 @@ dataset_stats(data)
 Three data frames ($general, $lessons, $participants)
 }
 \description{
-\code{dataset_stats} describes several statistics regarding the data set,
+\code{dataset_stats} describes several specifications regarding the data set,
 these are: Number of participants, number of unique facts, number of lessons,
 number of unique user-fact combinations, participants per lesson, facts per
-lesson, unique user-fact combinations per lesson, lessons per participant and
-sessions per participant.
+lesson, unique user-fact combinations per lesson, average RT per lesson,
+average accuracy per lesson, lessons per participant and sessions per
+participant.
 }
 \details{
-The number of participants, number of unique facts, number of lessons and
-participants per lesson are always printed in the console. The data frame
-with the sessions and lessons per participants is not printed, since the
-amount of participants can be substantial. All information can be found in
-$general, $lessons and $participants.
+The number of participants, number of unique facts, number of lessons,
+participants per lesson, average RT per lesson and average accuracy per
+lesson are always printed in the console. The data frame with the sessions
+and lessons per participants is not printed, since the amount of participants
+can be substantial. All information can be found in $general, $lessons and
+$participants.
 }

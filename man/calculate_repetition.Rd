@@ -13,5 +13,11 @@ calculate_repetition(data)
 Original data frame with column for repetition
 }
 \description{
-Returns the data frame with fact repetition for all trials.
+Returns the data frame with a column for fact repetition for all trials. This will
+override existing columns called 'repetition'.
 }
+\seealso{
+Other calculation functions: 
+\code{\link{calculate_alpha_and_activation}()}
+}
+\concept{calculation functions}

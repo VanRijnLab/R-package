@@ -1,4 +1,4 @@
-#' Read dataset
+#' Read data set
 #'
 #' \code{read_dataset} reads the raw data set into a data frame with correct
 #' settings
@@ -16,7 +16,6 @@ read_dataset <- function(file=system.file("extdata", "textcues_example.csv", pac
   cols <- c("factId", "userId", "sessionTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
             "factText")
   missingcol <- missing_columns_check(data, cols)
-  # MaxAlpha, MinAlpha and lookAheadTime to be added depending on function change
 
   if(length(missingcol) > 0){
     strCols <- paste(cols,collapse=" ")

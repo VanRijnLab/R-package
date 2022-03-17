@@ -27,6 +27,11 @@ calculate_alpha_and_activation(
 Original data frame with columns for activation and alpha
 }
 \description{
-Returns the data frame with activation and alpha for all trials. This will
+Returns the data frame with a column for activation and alpha for all trials. This will
 override existing columns called 'alpha' or 'activation'.
 }
+\seealso{
+Other calculation functions: 
+\code{\link{calculate_repetition}()}
+}
+\concept{calculation functions}

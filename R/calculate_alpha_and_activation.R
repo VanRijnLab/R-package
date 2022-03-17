@@ -1,7 +1,9 @@
 #' Calculate fact activation and alpha (rate of forgetting)
 #'
-#' Returns the data frame with activation and alpha for all trials. This will
+#' Returns the data frame with a column for activation and alpha for all trials. This will
 #' override existing columns called 'alpha' or 'activation'.
+#'
+#' @family calculation functions
 #'
 #' @param data A data frame
 #' @param minAlpha The minimum value that the alpha can be

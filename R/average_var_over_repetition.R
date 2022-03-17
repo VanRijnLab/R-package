@@ -1,9 +1,11 @@
-#' Plot average RT over repetitions
+#' Plot average RT of all participants over repetitions
 #'
 #' Plots the average RT of every session over the repetitions of the facts.
 #'
-#' Assumes that the dataset has a repetition column with fact repetition in
+#' Assumes that the data set has a repetition column with fact repetition in
 #' integers
+#'
+#' @family average functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
@@ -12,7 +14,7 @@
 #'   the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
 #'   (SD(RT))).
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return Plot of RT over repetition, with every line a participant and a pdf file in filepath
 #' @export
 average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
@@ -71,12 +73,14 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "
 }
 
 
-#' Plot average rate of forgetting over repetitions
+#' Plot average rate of forgetting of all participants over repetitions
 #'
-#' Plots the average rate of forgetting of every session over the repetitions of the facts.
+#' Plots the average rate of forgetting (alpha) of every session over the repetitions of the facts.
 #'
-#' Assumes that the dataset has a repetition column with fact repetition in
+#' Assumes that the data set has a repetition column with fact repetition in
 #' integers and a column with the alpha's for all observations
+#'
+#' @family average functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
@@ -84,7 +88,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return Plot of Alpha over repetition, with every line a participant and a pdf file in filepath
 #' @export
 average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
@@ -145,12 +149,14 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
   return(plot)
 }
 
-#' Plot average accuracy over repetitions
+#' Plot average accuracy of all participants over repetitions
 #'
 #' Plots the average accuracy of every session over the repetitions of the facts.
 #'
-#' Assumes that the dataset has a repetition column with fact repetition in
+#' Assumes that the data set has a repetition column with fact repetition in
 #' integers
+#'
+#' @family average functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
@@ -158,7 +164,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used: c(0, 1).
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return Plot of accuracy over repetition, with every line a participant and a pdf file in filepath
 #' @export
 average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){
@@ -222,10 +228,10 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 
 #' Plot average rate of forgetting over repetitions for each fact
 #'
-#' Plots the average rate of forgetting for each fact over the repetitions of
+#' Plots the average rate of forgetting (alpha) for each fact over the repetitions of
 #' the facts.
 #'
-#' Assumes that the dataset has a repetition column with fact repetition in
+#' Assumes that the data set has a repetition column with fact repetition in
 #' integers and a column with the alpha's for all observations.
 #'
 #' The legend is given in the order of the average alpha for the last repetition
@@ -235,6 +241,8 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 #' alpha. All last alpha's are also marker by a bigger marker in the plot. Be
 #' aware that lines/markers may sometimes overlap.
 #'
+#' @family average functions
+#'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param factNames Column that shows the names of the facts (like factText or factAnswer). Default shows factId.
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
@@ -242,7 +250,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return Plot of Alpha over repetition, with every line a fact and a pdf file in filepath
 #' @export
 average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){

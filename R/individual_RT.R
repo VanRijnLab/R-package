@@ -1,7 +1,9 @@
 #' Plot RT for all Facts for all Participants over Time
 #'
-#' \code{individual_RT} plots the RT of one session over time. Incorrect
-#' answers are denotes with a red marker.
+#' \code{individual_RT} plots the RT of all sessions over time. Incorrect
+#' answers are denoted with a red marker.
+#'
+#' @family individual functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
 #' @param sessionId Provide a single sessionId string to plot that session. If
@@ -17,7 +19,7 @@
 #'   minimum reaction time and b is the average reaction time plus the standard
 #'   deviation of the reaction time.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return data frame
+#' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
 individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
   if(missing(data)){

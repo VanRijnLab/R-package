@@ -1,6 +1,9 @@
 #' Calculate fact repetition
 #'
-#' Returns the data frame with fact repetition for all trials.
+#' Returns the data frame with a column for fact repetition for all trials. This will
+#' override existing columns called 'repetition'.
+#'
+#' @family calculation functions
 #'
 #' @param data A data frame
 #'
