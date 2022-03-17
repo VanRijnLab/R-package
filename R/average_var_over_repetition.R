@@ -266,7 +266,7 @@ av_ROF_rep_fact <- function(data, factNames = "factId", xlim = NULL, ylim = NULL
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
-  missing_values_message(data, c("sessionId", "alpha", "repetition", "factId"))
+  missing_values_message(data, c("sessionId", "alpha", "repetition", "factId", factNames))
 
   cat("This may take a moment... \n")
   plotTitle <- paste("Average ROF for every fact over repetition")
@@ -278,7 +278,8 @@ av_ROF_rep_fact <- function(data, factNames = "factId", xlim = NULL, ylim = NULL
 
   # Group by sessionId and repetition, then mean alpha as new column
   dat1 <- dplyr::group_by(.data = data, factId, repetition)
-  dat2 <- dplyr::summarise(.data = dat1, mean_alpha = mean(alpha, na.rm=TRUE))
+  dat2 <- dplyr::summarise(.data = dat1, mean_alpha = mean(alpha, na.rm=TRUE), factLabels = unique(.data[[factNames]])[[1]])
+  dat2$factLabels = substr(dat2$factLabels, 1, 10)
   dat3 <- dplyr::group_by(.data = dat2, factId)
   dat4 <- dplyr::filter(.data = dat3, repetition == max(repetition))
   dat5 <- dat4[order(dat4$mean_alpha, decreasing = TRUE),]
@@ -291,7 +292,7 @@ av_ROF_rep_fact <- function(data, factNames = "factId", xlim = NULL, ylim = NULL
     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
     ggplot2::geom_point(alpha = 0.5, size = 1, ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
     ggplot2::geom_point(data = dat5, alpha = 0.5, size = 3, position = ggplot2::position_jitter(w = 0.08, h = 0), ggplot2::aes(colour = factor(factId), fill = factor(factId))) +
-    ggplot2::scale_color_manual(name="Facts", values = factcolor, breaks=dat5$factId) +
+    ggplot2::scale_color_manual(name="Facts", labels = dat5$factLabels,values = factcolor, breaks=dat5$factId) +
     ggplot2::guides(fill = "none") +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
