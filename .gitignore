@@ -24,3 +24,7 @@
 .Rproj.user/
 .httr-oauth
 .DS_Store
+inst/doc
+Figures/
+/doc/
+/Meta/

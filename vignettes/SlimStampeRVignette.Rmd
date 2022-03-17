@@ -1,0 +1,122 @@
+---
+title: "SlimStampeRVignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SlimStampeRData}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, 
+  fig.height = 7
+  
+)
+```
+
+# Introduction
+This package is used to analyze SlimStampen App data. To use this package you need a .csv file with the data from the SlimStampen lessons that you want to analyze. 
+```{r setup}
+library(SlimStampeRData)
+```
+
+
+## Read data 
+Give the .csv location, for example: data <- read_dataset("C:/Users/YourName/Desktop/data.csv"). When no location is given the example data set is used.
+```{r}
+data <- read_dataset()
+```
+
+## First look
+To view the list of participants in your viewer you can use view(x$participants) instead.
+```{r}
+x <- dataset_stats(data)
+x$participants
+```
+
+
+***
+
+# Individual participants
+
+## Reaction Time
+
+```{r, fig.width = 8, fig.height = 8}
+individual_RT(data)
+```
+
+## Rate of Forgetting
+
+```{r, error = TRUE}
+individual_ROF(data)
+```
+
+Oh no, this data set has no alpha calculated. Be aware that any columns that are called 'alpha' or 'activation' will be re-written.
+
+```{r}
+data <- calculate_alpha_and_activation(data)
+```
+
+You could also change the settings, if they were different in the experimental setup.
+
+
+Now run again:
+
+```{r, fig.width = 8, fig.height = 8}
+individual_ROF(data)
+```
+
+***
+# Average of participants
+The average variables are plotted over the amount of repetitions a fact has been presented. These functions give an error if your data set does not have a column with the number of repetition for each trial.
+
+```{r, error = TRUE}
+average_accuracy_participants(data)
+```
+
+To solve this you can run the function... Be aware that any existing columns with the name 'repetition' will be re-written.
+
+```{r}
+data <- calculate_repetition(data)
+```
+
+Now the average functions will not return an error anymore.
+
+## Accuracy
+```{r}
+average_accuracy_participants(data)
+```
+
+## Reaction Time
+```{r}
+average_RT_participants(data)
+```
+
+## Rate Of Forgetting
+```{r}
+average_ROF_participants(data)
+```
+
+***
+# Average of facts
+
+## Rate of Forgetting
+
+```{r}
+average_ROF_facts(data)
+```
+Explanation about legend. 
+Also you can choose different labels.
+```{r}
+#Instead of "factText" you could also use "factAnswer"
+average_ROF_facts(data, factNames = "factText")
+```
+
+***
+# Possible Errors and warnings
+
+
+
