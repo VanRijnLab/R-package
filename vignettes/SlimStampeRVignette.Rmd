@@ -2,7 +2,7 @@
 title: "SlimStampeRVignette"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{SlimStampeRData}
+  %\VignetteIndexEntry{SlimStampeRVignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,112 +11,246 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7, 
-  fig.height = 7
-  
+  fig.width = 5, 
+  fig.height = 5
 )
 ```
 
 # Introduction
 This package is used to analyze SlimStampen App data. To use this package you need a .csv file with the data from the SlimStampen lessons that you want to analyze. 
+The functions in this package are focused on giving a general overview of what the data looks like, not to provide specific statistical analyses.
+
+To use this package you first need to call the `library()` function to load the package into your RStudio environment.
+
 ```{r setup}
 library(SlimStampeRData)
 ```
+```{r, echo = FALSE}
+path <- tempdir()
+```
+
+## Detailed information
+This vignette is a global overview of how the functions in this package can be used. Every function also has it's own page in which all parameters and the input and output of the function are described. To see this page you can enter the function name with a question mark in front of it in the console.
+
+```{r, eval = FALSE}
+#To see the information page of a function
+?individual_RT
+?read_dataset
+
+#To see the information page of the package
+?SlimStampeRData
+
+#To see the index page of the package (with all functions listed)
+help(package = "SlimStampeRData")
+
+```
+
+You may run into warning or error messages when you run the code. At the end of this vignette is a section with common warning and error messages and their solutions.
 
 
 ## Read data 
-Give the .csv location, for example: data <- read_dataset("C:/Users/YourName/Desktop/data.csv"). When no location is given the example data set is used.
+The `read_dataset()` function reads the data from your .csv file into RStudio, so you can use it as a data table. The `read-dataset()` function needs the location of the .csv file to be able to read it.
+
+```{r, eval= FALSE}
+# Not run
+# Example of possible CSV location
+data <- read_dataset("C:/Users/YourName/Desktop/data.csv")
+```
+
+
+When no location is given the example data set is used.
+
 ```{r}
 data <- read_dataset()
 ```
 
 ## First look
-To view the list of participants in your viewer you can use view(x$participants) instead.
+The function `dataset_stats()` gives a quick summary of the data set. It is easiest to save the output in a variable, so the participant table can be accessed later on. Because this table can be very long it is not printed in the standard output.
+
 ```{r}
 x <- dataset_stats(data)
 x$participants
 ```
 
+To view the list of participants in your viewer you can use `View(x$participants)` instead.
+
+***
+# Plots
+Most functions in this package give a plot as output. The plot itself or a preview of the plots (if there are multiple) will be printed in the viewer. The plots will also be saved in a PDF in your filesystem. If you don't specify a file path the PDFs will be saved in your current directory.
+If you don't know what your current directory is, you can check this by entering `getwd()` in the console.
+If you'd like to specify where PDF files should be saved you can do this by choosing either an objective or relative path.
+
+An objective path could be:
+
+```{r, eval = FALSE}
+path <- "C:/Users/YourName/Documents"
+```
+
+A relative path could be:
+
+```{r, eval = FALSE}
+path <- "Figures"
+```
+
+This means that the pdf will be saved in a folder names 'Figures' in the current directory. The function does expect this folder to already exist and will give an error if the folder does not exist.
+
+
+Another example of a relative path:
+
+```{r, eval = FALSE}
+path <- "../Figures"
+```
+
+This means that the files will be saved in the folder called 'Figures' in the folder above your current working directory.
+
+All functions that print plots in this vignette will specify the parameter 'filepath' as a temporary folder. 
+If you want to use the default save option you can just leave the parameter 'filepath' out of the function call.
+
 
 ***
 
 # Individual participants
+There are two functions that print plots for all participants in the data set. This gives an overview of how all participants performed and whether any participants have an unusual performance. The trials in which the participant gave an incorrect answer have a red marker, where the correct answers have a grey marker.
+It may occur that there is more than one plot for the same user-lesson combination. This can occur when the same user engaged in several sessions within the same lesson. 
 
 ## Reaction Time
 
 ```{r, fig.width = 8, fig.height = 8}
-individual_RT(data)
+individual_RT(data, filepath = path)
 ```
+
+There is also the option to print only one session:
+
+```{r, fig.width = 8, fig.height = 8}
+individual_RT(data, sessionId = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
+```
+
 
 ## Rate of Forgetting
 
 ```{r, error = TRUE}
-individual_ROF(data)
+individual_ROF(data, filepath = path)
 ```
 
-Oh no, this data set has no alpha calculated. Be aware that any columns that are called 'alpha' or 'activation' will be re-written.
+The function above shows an error when you try to run it with the example data set. This is because the example data set does not have a column which shows the alpha for every trial. To remedy this you can run the function `calculate_alpha_and_activation()`. Be aware that any existing columns that are called 'alpha' or 'activation' will be re-written.
+
+If your data set already contains a column with the alpha values you can skip this step.
 
 ```{r}
 data <- calculate_alpha_and_activation(data)
 ```
 
 You could also change the settings, if they were different in the experimental setup.
+For example:
+
+```{r, eval = FALSE}
+# Not run
+data <- calculate_alpha_and_activation(data, minAlpha = 0, maxAlpha = 1, standardAlpha = 0.5, fThreshold = -0.6)
+```
 
 
-Now run again:
+Now, if you run the `individual_ROF()` function again, it should run without an error message.
 
 ```{r, fig.width = 8, fig.height = 8}
-individual_ROF(data)
+individual_ROF(data, filepath = path)
 ```
 
 ***
 # Average of participants
-The average variables are plotted over the amount of repetitions a fact has been presented. These functions give an error if your data set does not have a column with the number of repetition for each trial.
+There are three functions that plot an average for a variable over all participants. These functions give a plot as output in which all lines represent a participant. On the x-axis the repetitions of facts is used. This is the amount of times that a fact has been presented to the participant.
+
+These functions give an error if your data set does not have a column with the number of repetition for each trial.
 
 ```{r, error = TRUE}
-average_accuracy_participants(data)
+average_accuracy_participants(data, filepath = path)
 ```
 
-To solve this you can run the function... Be aware that any existing columns with the name 'repetition' will be re-written.
+To solve this you can run the function `calculate_repetition()`. Be aware that any existing columns with the name 'repetition' will be re-written.
+
+If your data set already contains a column with the repetition values you can skip this step.
 
 ```{r}
 data <- calculate_repetition(data)
 ```
 
-Now the average functions will not return an error anymore.
+Now, if you run one of the average functions, it should do so without an error message.
 
 ## Accuracy
 ```{r}
-average_accuracy_participants(data)
+average_accuracy_participants(data, filepath = path)
 ```
+
 
 ## Reaction Time
 ```{r}
-average_RT_participants(data)
+average_RT_participants(data, filepath = path)
 ```
 
 ## Rate Of Forgetting
 ```{r}
-average_ROF_participants(data)
+average_ROF_participants(data, filepath = path)
 ```
 
 ***
 # Average of facts
+There is one function that plots the average Rate of Forgetting over all facts. This function gives a plot as output in which all lines represent a fact.
+
+This function gives an error if your data set does not have a column with the number of repetition for each trial. See the section 'Average of participants' for more information.
 
 ## Rate of Forgetting
 
-```{r}
-average_ROF_facts(data)
+```{r, fig.width = 6.5, fig.height = 6.5}
+average_ROF_facts(data, filepath = path)
 ```
-Explanation about legend. 
-Also you can choose different labels.
-```{r}
+
+The big markers show what the last average alpha is for that fact. These last alpha's are then used to decide to order of the facts in the legend.
+If there is more than one column in the legend (if there are too many facts to fit in one column), the columns should be read one-by-one. The upper-left value is the highest last alpha, the lower- right value is the lowest last alpha. Be aware that lines/markers may sometimes overlap.
+
+The parameter 'factNames' allows you to choose which column should be used to label the facts. Beware that for some data sets only a limited amount of columns will provide labels for all facts. For example, in a data set in which 'factText' and 'fileName' are both used, these columns are likely to not provide labels for all facts. In this case using the column 'factAnswer' instead may be useful.
+
+```{r, fig.width = 6.5, fig.height = 6.5}
 #Instead of "factText" you could also use "factAnswer"
-average_ROF_facts(data, factNames = "factText")
+average_ROF_facts(data, factNames = "factText", filepath = path)
 ```
 
 ***
 # Possible Errors and warnings
 
+### Warning message: In read_dataset() : One or more of these columns is missing: factId userId sessionTime reactionTime correct lessonTitle lessonId sessionId factText
+Some of the functions in this package may not work if these columns are not provided. 
+This warning will occur when one of the columns that the package expects to be there is not present. This can occur in several ways:
 
+* This may happen because the data is not read correctly. This warning does not stop the data from being read, so you should be able to look at the data table and see whether the data is correct in the table.
+* The data set does contain the columns, but one (or more) of the columns are named different. You can easily fix this by changing the column name, either in the original .csv file (and then read it again) or in the data table after it is created. To see what information all columns should contain you can look at the documentation on the [SlimStampeRData Github](https://github.com/VanRijnLab/SlimStampeRData/wiki/Documentation). 
+* The column is simply not present in your original .csv file. You can still try to use the functions in this package, but some of them may not work.
+
+### ! There are missing values in the column  XXX  ! 
+Column xxx contains missing values. This means that there are either empty cells or cells that contain 'NA'. Check your data to see whether the missing data belongs in the data set or not. Most of the functions in this package will run when missing data is present, but data points that contain missing data may not be printed in plots or they may skew calculated variables (such as the mean alpha/RT/accuracy). 
+
+### There were XX warnings (use warnings() to see them)
+Running warnings() will show you the warnings messages that occurred when running the function.
+
+```{r, eval = FALSE}
+warnings()
+```
+
+### Removed XX rows containing missing values (geom_point/geom_path)
+There are NA values in your dataset. The plots for the sessionId’s that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a datapoint. The first line that is printed after the function should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
+It is preferred to deal with NA values in some way, either removing them (if this makes sense in the data and methodology) or replacing them. For example, for a missing reaction time it is common to replace this NA value with the average reaction time of the participant.
+
+
+### Error in grDevices::pdf(file = filename, ..., version = version) : cannot open file 'C:/example/file/path/filename.pdf'
+The place you specified to save your file does not exist. Make sure that you have specified a directory that already exists.
+
+
+
+
+
+
+
+
+
+```{r, echo = FALSE}
+unlink(path)
+```
 
