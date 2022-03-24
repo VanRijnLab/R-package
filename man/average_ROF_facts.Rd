@@ -9,7 +9,7 @@ average_ROF_facts(
   factNames = "factId",
   xlim = NULL,
   ylim = NULL,
-  filepath = "../Figures"
+  filepath = NULL
 )
 }
 \arguments{

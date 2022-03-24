@@ -10,7 +10,7 @@ individual_ROF(
   normalizeTime = FALSE,
   xlim = NULL,
   ylim = NULL,
-  filepath = "../Figures"
+  filepath = NULL
 )
 }
 \arguments{

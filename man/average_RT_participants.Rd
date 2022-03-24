@@ -4,12 +4,7 @@
 \alias{average_RT_participants}
 \title{Plot average RT of all participants over repetitions}
 \usage{
-average_RT_participants(
-  data,
-  xlim = NULL,
-  ylim = NULL,
-  filepath = "../Figures"
-)
+average_RT_participants(data, xlim = NULL, ylim = NULL, filepath = NULL)
 }
 \arguments{
 \item{data}{A data frame. NA values will be removed before plotting.}

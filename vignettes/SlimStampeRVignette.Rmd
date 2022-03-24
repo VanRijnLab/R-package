@@ -45,7 +45,7 @@ help(package = "SlimStampeRData")
 
 ```
 
-You may run into warning or error messages when you run the code. At the end of this vignette is a section with common warning and error messages and their solutions.
+You may run into warning or error messages when you run the code in this vignette. At the end of this vignette is a section with common warning and error messages and their solutions.
 
 
 ## Read data 
@@ -77,7 +77,8 @@ To view the list of participants in your viewer you can use `View(x$participants
 ***
 # Plots
 Most functions in this package give a plot as output. The plot itself or a preview of the plots (if there are multiple) will be printed in the viewer. The plots will also be saved in a PDF in your filesystem. If you don't specify a file path the PDFs will be saved in your current directory.
-If you don't know what your current directory is, you can check this by entering `getwd()` in the console.
+If you don't know what your current directory is, you can check this by entering `getwd()` in the console. If you want to work in another directory you can set this by using `setwd("C:/path/to/working/directory")`
+
 If you'd like to specify where PDF files should be saved you can do this by choosing either an objective or relative path.
 
 An objective path could be:
@@ -104,7 +105,7 @@ path <- "../Figures"
 This means that the files will be saved in the folder called 'Figures' in the folder above your current working directory.
 
 All functions that print plots in this vignette will specify the parameter 'filepath' as a temporary folder. 
-If you want to use the default save option you can just leave the parameter 'filepath' out of the function call.
+If you want to use the default save option when you run the function yourself, you can just leave the parameter 'filepath' out of the function call.
 
 
 ***
@@ -119,9 +120,9 @@ It may occur that there is more than one plot for the same user-lesson combinati
 individual_RT(data, filepath = path)
 ```
 
-There is also the option to print only one session:
+There is also the option to print only one session for both this RT function and the individual ROF function mentioned below:
 
-```{r, fig.width = 8, fig.height = 8}
+```{r}
 individual_RT(data, sessionId = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
 ```
 

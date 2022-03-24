@@ -10,7 +10,7 @@ individual_RT(
   normalizeTime = FALSE,
   xlim = NULL,
   ylim = NULL,
-  filepath = "../Figures"
+  filepath = NULL
 )
 }
 \arguments{

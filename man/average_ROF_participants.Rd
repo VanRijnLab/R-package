@@ -4,12 +4,7 @@
 \alias{average_ROF_participants}
 \title{Plot average rate of forgetting of all participants over repetitions}
 \usage{
-average_ROF_participants(
-  data,
-  xlim = NULL,
-  ylim = NULL,
-  filepath = "../Figures"
-)
+average_ROF_participants(data, xlim = NULL, ylim = NULL, filepath = NULL)
 }
 \arguments{
 \item{data}{A data frame. NA values will be removed before plotting.}
