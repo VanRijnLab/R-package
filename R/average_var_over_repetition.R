@@ -66,7 +66,12 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
   title <- paste("Average_RT_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-  cat("PDF of plot can be found in: ", filepath, "\n")
+  fileplace <- filepath
+  if(is.null(filepath)){
+    fileplace <- getwd()
+  }
+
+  cat("PDF of plot can be found in: ", fileplace, "\n")
 
   # Display plot in viewer
   return(plot)
@@ -143,7 +148,12 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
   title <- paste("Average_ROF_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-  cat("PDF of plot can be found in: ", filepath, "\n")
+  fileplace <- filepath
+  if(is.null(filepath)){
+    fileplace <- getwd()
+  }
+
+  cat("PDF of plot can be found in: ", fileplace, "\n")
 
   # Display plot in viewer
   return(plot)
@@ -220,7 +230,12 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
   title <- paste("Average_accuracy_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-  cat("PDF of plot can be found in: ", filepath, "\n")
+  fileplace <- filepath
+  if(is.null(filepath)){
+    fileplace <- getwd()
+  }
+
+  cat("PDF of plot can be found in: ", fileplace, "\n")
 
   # Display plot in viewer
   return(plot)
@@ -319,7 +334,12 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
   title <- paste("Average_ROF_facts_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-  cat("PDF of plot can be found in: ", filepath, "\n")
+  fileplace <- filepath
+  if(is.null(filepath)){
+    fileplace <- getwd()
+  }
+
+  cat("PDF of plot can be found in: ", fileplace, "\n")
 
   # Display plot in viewer
   return(plot)

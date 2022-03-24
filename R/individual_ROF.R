@@ -107,13 +107,17 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
   }
   res <- NULL
   title <- paste("Individual_ROF_", title_time(), ".pdf")
+  fileplace <- filepath
+  if(is.null(filepath)){
+    fileplace <- getwd()
+  }
   if(sessionflag){
     res <- plots[[1]]
 
     # Save all plots to a pdf file
     ggplot2::ggsave(title, res, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-    cat("PDF of plot can be found in: ", filepath, "\n")
+    cat("PDF of plot can be found in: ", fileplace, "\n")
 
   } else {
     res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
@@ -123,7 +127,7 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
                     device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
     cat("Preview of the first 4 plots are displayed in viewer. \n")
-    cat("PDF of plots can be found in: ", filepath, "\n")
+    cat("PDF of plots can be found in: ", fileplace, "\n")
   }
 
   # Display first 4 plots
