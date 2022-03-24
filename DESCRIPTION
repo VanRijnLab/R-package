@@ -24,5 +24,6 @@ Imports:
     gridExtra,
     cowplot,
     viridis,
-    utils
+    utils,
+    bit64
 VignetteBuilder: knitr
