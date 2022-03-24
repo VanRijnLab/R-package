@@ -39,12 +39,15 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
 
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "correct", "alpha"))
 
+  sessionflag <- FALSE
+
   if(is.null(sessionId)){
     participants <- sort(unique(data$sessionId))
   } else {
     if(!(is.character(sessionId) & length(sessionId) == 1)){
       stop("SessionId is not a string")
     }
+    sessionflag <- TRUE
     participants <- character(0)
     participants[1] <- sessionId
   }
@@ -102,17 +105,30 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
       plots4[[i]] <- plot
     }
   }
-  res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
+  res <- NULL
+  if(sessionflag){
+    res <- plots[[1]]
 
-  # Save all plots to a pdf file
-  # date <- format(Sys.time(), "%d-%b-%Y %Hh%Mm%Ss")
-  title <- paste("ROF_over_time_", title_time(), ".pdf")
-  ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
-                  device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
+    # Save all plots to a pdf file
+    title <- paste("ROF_over_time_", title_time(), ".pdf")
+    ggplot2::ggsave(title, res, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
-  cat("Preview of the first 4 plots are displayed in viewer. \n")
-  cat("PDF of plots can be found in: ", filepath, "\n")
+    cat("PDF of plot can be found in: ", filepath, "\n")
+
+  } else {
+    res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
+
+    # Save all plots to a pdf file
+    title <- paste("ROF_over_time_", title_time(), ".pdf")
+    ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
+                    device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
+
+    cat("Preview of the first 4 plots are displayed in viewer. \n")
+    cat("PDF of plots can be found in: ", filepath, "\n")
+  }
 
   # Display first 4 plots
   return(res)
+
+
 }
