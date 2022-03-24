@@ -16,7 +16,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return Plot of RT over repetition, with every line a participant and a pdf file in filepath
 #' @export
-average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -63,7 +63,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  title <- paste("Average_RT_over_repetition_", title_time(), ".pdf")
+  title <- paste("Average_RT_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")
@@ -90,7 +90,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return Plot of Alpha over repetition, with every line a participant and a pdf file in filepath
 #' @export
-average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -140,7 +140,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  title <- paste("Average_ROF_over_repetition_", title_time(), ".pdf")
+  title <- paste("Average_ROF_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")
@@ -166,7 +166,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return Plot of accuracy over repetition, with every line a participant and a pdf file in filepath
 #' @export
-average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -217,7 +217,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  title <- paste("Average_accuracy_over_repetition_", title_time(), ".pdf")
+  title <- paste("Average_accuracy_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")
@@ -261,7 +261,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 #' @return Plot of Alpha over repetition, with every line a fact and a pdf file
 #'   in filepath
 #' @export
-average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = "../Figures") {
+average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -316,7 +316,7 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
     ggplot2::ggtitle(plotTitle)
 
   # Save all plots to a pdf file
-  title <- paste("av_ROF_repetition_fact_", title_time(), ".pdf")
+  title <- paste("Average_ROF_facts_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
   cat("PDF of plot can be found in: ", filepath, "\n")

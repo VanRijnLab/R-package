@@ -19,7 +19,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
-individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = "../Figures") {
+individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -106,11 +106,11 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     }
   }
   res <- NULL
+  title <- paste("Individual_ROF_", title_time(), ".pdf")
   if(sessionflag){
     res <- plots[[1]]
 
     # Save all plots to a pdf file
-    title <- paste("ROF_over_time_", title_time(), ".pdf")
     ggplot2::ggsave(title, res, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
     cat("PDF of plot can be found in: ", filepath, "\n")
@@ -119,7 +119,6 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
 
     # Save all plots to a pdf file
-    title <- paste("ROF_over_time_", title_time(), ".pdf")
     ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
                     device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
