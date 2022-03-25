@@ -13,8 +13,9 @@ average_RT_participants(data, xlim = NULL, ylim = NULL, filepath = NULL)
 the x-axis.If NULL the default value is used.}
 
 \item{ylim}{A vector of 2 (for example: c(0, 1000)), indicating the range of
-the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
-(SD(RT))).}
+the y-axis.If NULL the default value is used: c(a, b). Where a is the
+minimum reaction time and b is the average reaction time plus the standard
+deviation of the reaction time.}
 
 \item{filepath}{A relative or explicit path where plots will be saved}
 }

@@ -9,7 +9,7 @@ read_dataset(
 )
 }
 \arguments{
-\item{file}{A csv file. If no file is provided the example .csv file will be loaded.}
+\item{file}{A .csv file. If no file is provided the example .csv file will be loaded.}
 }
 \value{
 data frame

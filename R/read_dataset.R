@@ -2,7 +2,7 @@
 #'
 #' \code{read_dataset} reads the raw data set into a data frame with correct
 #' settings
-#' @param file A csv file. If no file is provided the example .csv file will be loaded.
+#' @param file A .csv file. If no file is provided the example .csv file will be loaded.
 #'
 #' @return data frame
 #' @export

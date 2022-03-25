@@ -11,8 +11,9 @@
 #' @param xlim A vector of 2 (for example: c(0, 10)), indicating the range of
 #'   the x-axis.If NULL the default value is used.
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
-#'   the y-axis.If NULL the default value is used: c(min(RT), mean(RT) +
-#'   (SD(RT))).
+#'   the y-axis.If NULL the default value is used: c(a, b). Where a is the
+#'   minimum reaction time and b is the average reaction time plus the standard
+#'   deviation of the reaction time.
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return Plot of RT over repetition, with every line a participant and a pdf file in filepath
 #' @export
@@ -62,7 +63,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
     ggplot2::labs(x = "Fact Repetitions", y = "Reaction Time (ms)") +
     ggplot2::ggtitle(plotTitle)
 
-  # Save all plots to a pdf file
+  # Save plot to a pdf file
   title <- paste("Average_RT_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
@@ -144,7 +145,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
     ggplot2::ggtitle(plotTitle)
 
-  # Save all plots to a pdf file
+  # Save plot to a pdf file
   title <- paste("Average_ROF_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
@@ -226,7 +227,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
     ggplot2::labs(x = "Fact Repetitions", y = "Accuracy") +
     ggplot2::ggtitle(plotTitle)
 
-  # Save all plots to a pdf file
+  # Save plot to a pdf file
   title <- paste("Average_accuracy_participants_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
@@ -330,7 +331,7 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
     ggplot2::ggtitle(plotTitle)
 
-  # Save all plots to a pdf file
+  # Save plot to a pdf file
   title <- paste("Average_ROF_facts_", title_time(), ".pdf")
   ggplot2::ggsave(title, plot, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
