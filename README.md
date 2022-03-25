@@ -1,5 +1,5 @@
 # SlimStampeRData
-This R package helps with analyzing data from the App-version of SlimStampen.
+This R package helps you with analyzing data from the App-version of SlimStampen.
 
 ## Beginner guide
 If you are new to RStudio, please follow these steps.
