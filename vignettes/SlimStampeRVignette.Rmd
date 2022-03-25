@@ -222,11 +222,14 @@ Some of the functions in this package may not work if these columns are not prov
 This warning will occur when one of the columns that the package expects to be there is not present. This can occur in several ways:
 
 * This may happen because the data is not read correctly. This warning does not stop the data from being read, so you should be able to look at the data table and see whether the data is correct in the table.
-* The data set does contain the columns, but one (or more) of the columns are named different. You can easily fix this by changing the column name, either in the original .csv file (and then read it again) or in the data table after it is created. To see what information all columns should contain you can look at the documentation on the [SlimStampeRData Github](https://github.com/VanRijnLab/SlimStampeRData/wiki/Documentation). 
+* The data set does contain the columns, but one (or more) of the columns are named different. You can easily fix this by changing the column name, either in the original .csv file (and then read it again) or in the data table after it is created. To see what information all columns should contain you can look at the documentation on the [SlimStampeRData GitHub](https://github.com/VanRijnLab/SlimStampeRData/wiki/Documentation). 
 * The column is simply not present in your original .csv file. You can still try to use the functions in this package, but some of them may not work.
 
 ### ! There are missing values in the column  XXX  ! 
 Column xxx contains missing values. This means that there are either empty cells or cells that contain 'NA'. Check your data to see whether the missing data belongs in the data set or not. Most of the functions in this package will run when missing data is present, but data points that contain missing data may not be printed in plots or they may skew calculated variables (such as the mean alpha/RT/accuracy). 
+
+### geom_path: Each group consists of only one observation. Do you need to adjust the group aesthetic?
+This message usually occurs when there are sessions in the data that contain only one data point. This can lead to the graphs not looking very nice. When this occurs the graphs will still be printed in the PDF file, so there is no need to change anything if the sessions are correct in the data.
 
 ### There were XX warnings (use warnings() to see them)
 Running warnings() will show you the warnings messages that occurred when running the function.
@@ -236,8 +239,8 @@ warnings()
 ```
 
 ### Removed XX rows containing missing values (geom_point/geom_path)
-There are NA values in your data set. The plots for the sessionId’s that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed after the function should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
-It is preferred to deal with NA values in some way, either removing them (if this makes sense in the data and methodology) or replacing them. For example, for a missing reaction time it is common to replace this NA value with the average reaction time of the participant.
+There are NA values in your data set. The plots for the sessionIds that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed after the function should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
+It is preferred to deal with NA values in some way, either removing them (if this makes sense in the data and methodology) or replacing them. For example, for a missing reaction time it is common to replace this NA value with the average reaction time of the participant or the maximum reaction time.
 
 
 ### Error in grDevices::pdf(file = filename, ..., version = version) : cannot open file 'C:/example/file/path/filename.pdf'
