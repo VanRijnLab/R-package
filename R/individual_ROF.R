@@ -79,7 +79,6 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     dat3 <- NULL
     if(normalizeTime){
       dat2 <- dplyr::group_by(dat1, factId)
-      #when sorted by person, session and factId
       dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
       dat3 <- dplyr::ungroup(dat3)
     } else {
@@ -114,7 +113,7 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
   if(sessionflag){
     res <- plots[[1]]
 
-    # Save all plots to a pdf file
+    # Save plot to a pdf file
     ggplot2::ggsave(title, res, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
     cat("PDF of plot can be found in: ", fileplace, "\n")

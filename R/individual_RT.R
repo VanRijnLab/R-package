@@ -74,7 +74,6 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
     dat3 <- NULL
     if(normalizeTime){
       dat2 <- dplyr::group_by(dat1, factId)
-      #when sorted by person, session and factId
       dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
       dat3 <- dplyr::ungroup(dat3)
     } else {
@@ -90,7 +89,6 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
       ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
       ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
       ggplot2::guides(colour = "none", fill = "none") +
-      # ggplot2::guides(colour = "none") +
       ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
       ggplot2::scale_color_manual(values = factcolor) +
       ggplot2::coord_cartesian(xlim = x, ylim = y) +
@@ -110,7 +108,7 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
   if(sessionflag){
     res <- plots[[1]]
 
-    # Save all plots to a pdf file
+    # Save plot to a pdf file
     ggplot2::ggsave(title, res, device = "pdf", path = filepath, width = 25, height = 20, units = "cm")
 
     cat("PDF of plot can be found in: ", fileplace, "\n")

@@ -1,3 +1,4 @@
+# Sets the x-axis limits
 set_x <- function(column, xlim) {
   maxTime <- max(column)
   minTime <- min(column)
@@ -9,6 +10,7 @@ set_x <- function(column, xlim) {
   return(x)
 }
 
+# Sets the y-axis limits
 set_y <- function(column, ylim) {
   meancol <- mean(column, na.rm=TRUE)
   sdcol <- stats::sd(column, na.rm=TRUE)
@@ -22,6 +24,7 @@ set_y <- function(column, ylim) {
   return(y)
 }
 
+# Prints a message when the column contains missing values
 missing_values_message <- function(data, columns) {
   indx <- apply(data, 2, function(x) any(is.na(x)))
   for(col in columns){
@@ -31,6 +34,7 @@ missing_values_message <- function(data, columns) {
   }
 }
 
+# Returns a non-empty vector when a column is missing
 missing_columns_check <- function(data, columns) {
   missingcols <- character(0)
   for(col in columns){
@@ -41,7 +45,7 @@ missing_columns_check <- function(data, columns) {
   return(missingcols)
 }
 
-
+# Formats the current time for PDF file titles
 title_time <- function() {
   return (format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss"))
 }
