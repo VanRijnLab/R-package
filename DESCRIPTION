@@ -1,12 +1,12 @@
 Package: SlimStampeRData
 Title: Analyze SlimStampen App Data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Han", "Havinga", , "h.m.havinga@gmail.com", role = c("aut", "cre")),
-    person("SlimStampen", role = "cph"))
+    person("Rijksuniversiteit Groningen", role = "cph"))
 Description: This package contains functions that help you analyze the data from the App-version of SlimStampen.
 URL: https://github.com/VanRijnLab/SlimStampeRData
-License: GPL (>= 3)
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
