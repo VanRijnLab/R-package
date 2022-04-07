@@ -8,10 +8,21 @@
 #' @return data frame
 #' @export
 #'
-read_dataset_excel <- function(file_response, file_lesson, file_fact) {
+read_dataset_excel <- function(file_response = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_response.xlsx",
+                               file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
+                               file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx") {
   # if(file == system.file("extdata", "files.xlsx", package = "SlimStampeRData")) {
   #   message("Example dataset was used: excel sample")
   # }
+
+  out <- list()
+
+  out$dataLesson <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx")
+
+  out$dataFact <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx")
+
+  out$dataResponse <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_response.xlsx")
+
 
 
 
@@ -39,5 +50,5 @@ read_dataset_excel <- function(file_response, file_lesson, file_fact) {
   # }
 
 
-  return(data)
+  return(out)
 }
