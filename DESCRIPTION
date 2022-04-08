@@ -25,5 +25,7 @@ Imports:
     cowplot,
     viridis,
     utils,
-    bit64
+    bit64,
+    readxl,
+    jsonlite
 VignetteBuilder: knitr
