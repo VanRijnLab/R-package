@@ -8,20 +8,68 @@
 #' @return data frame
 #' @export
 #'
-read_dataset_excel <- function(file_response = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_response.xlsx",
+read_dataset_excel <- function(file_response = "../SlimStampen_data_examples/vocatrainer/small_response.xlsx",
                                file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
                                file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx") {
   # if(file == system.file("extdata", "files.xlsx", package = "SlimStampeRData")) {
   #   message("Example dataset was used: excel sample")
   # }
+  cat("This may take a few minutes... \n")
 
   out <- list()
 
-  out$dataLesson <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx")
+  out$dataLesson <- readxl::read_excel(file_lesson)
 
-  out$dataFact <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx")
+  out$dataFact <- readxl::read_excel(file_fact)
 
-  out$dataResponse <- read_excel("~/Werk/SlimStampen/Package R/SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_response.xlsx")
+  out$dataResponse <- readxl::read_excel(file_response)
+
+  jsonToDataFrame <- function(string) {
+    # parsedJSON <- jsonlite::fromJSON(string)
+    parsedJSON <- jsonlite::fromJSON(txt=gsub("null", "\"\"", string))
+    # parsedJSON <- jsonlite::fromJSON(txt=gsub("null", "NA", string))
+    # parsedJSON <- do.call(c, jsonlite:::null_to_na(jsonlite::fromJSON(string)))
+    # parsedJSON <- jsonlite::fromJSON(txt=gsub("\"\"", "\"", string))
+    parsedJSON[[14]] = NULL
+    parsedJSON[[12]] = NULL
+    parsedJSON[[8]] = NULL
+    return(parsedJSON)
+  }
+
+  colBindJson <- function(dataFrame) {
+    colnames(dataFrame) <- c("userId", "factId_gen", "lessonId", "sequence_number",
+                             "data", "create_time")
+
+    newList <- jsonToDataFrame(dataFrame$data[1])
+
+    # Create empty data from for json data
+    jsonData <- data.frame(matrix(NA, nrow = nrow(dataFrame), ncol = length(newList)))
+
+    # Set column headers from parsed json
+    colnames(jsonData) <- names(newList)
+
+    #Set column types for new dataframe
+
+    # read JSON and convert to data.frame row
+    for (rowNumber in 1:nrow(dataFrame)) {
+      cat("rownumber", rowNumber, "\n")
+      dataList <- jsonToDataFrame(dataFrame$data[rowNumber])
+      # dataDf <- as.data.frame(matrix(unlist(dataList),nrow=length(dataList),byrow=TRUE))
+      if(dataList$reactionTime == "") {dataList$reactionTime <- NA}
+      dataDf <- as.data.frame(do.call(rbind, dataList))
+      # Transpose the list (which is interpreted as a column), to a row
+      jsonData[rowNumber,] <- t(dataDf[1])
+    }
+    as.data.frame(lapply(jsonData, type.convert))
+
+    combinedDF <- cbind(dataFrame, jsonData)
+
+    return(combinedDF)
+  }
+
+  out$ResponseFinal <- colBindJson(out$dataResponse)
+
+
 
 
 
