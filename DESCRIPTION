@@ -27,5 +27,6 @@ Imports:
     utils,
     bit64,
     readxl,
-    jsonlite
+    jsonlite,
+    rjson
 VignetteBuilder: knitr
