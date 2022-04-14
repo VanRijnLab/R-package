@@ -124,4 +124,22 @@ findLesson <- function(dataframe, lessonInfo) {
   return(dataframe)
 }
 
+findfact <- function(dataframe, factInfo) {
+  # dataframe[nrow(dataframe) + 1,] = list(1, 27666, 1900, 1, "data", "1")
+  #
+  # setkey(Employees,Department)
+  # setkey(Departments,Department)
+  # data.table::setkey(dataframe, fact_id)
+  # data.table::setkey(factInfo, id)
+  #
+  # dataframe[ , 'factText'] <- NA
+  #
+  # dataframe[lookup, on = paste0('fact_id', "==text"), (factText) := target]
+  #
+  #
+  # dataframe$lessonTitle <- lessonInfo$title[match(dataframe$lesson_id, lessonInfo$id)]
+
+  return(dataframe)
+}
+
 
