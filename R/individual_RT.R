@@ -80,9 +80,9 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
       dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
     }
     # Make plot title
-    lesson <- unique(dat3$lessonTitle)
+    lesson <- unique(substr(dat3$lessonTitle, 1, 19))
     user <- unique(dat3$userId)
-    plotTitle <- paste("Lesson: ", lesson[1], ", User: ", user[1])
+    plotTitle <- paste("Lesson: ", lesson[1], ",User: ", user[1])
 
     # Make plot
     plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
