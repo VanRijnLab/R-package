@@ -76,7 +76,7 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
 
   cat("Done! \n")
 
-  return(out)
+  return(out$finalResponse)
 }
 
 jsonToDataFrame <- function(string) {
