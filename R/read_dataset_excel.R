@@ -8,15 +8,19 @@
 #' @return data frame
 #' @export
 #'
-read_dataset_excel <- function(lessons = 27, file_response = "../SlimStampen_data_examples/vocatrainer/small_response.xlsx",
+read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_examples/vocatrainer/medium_response.xlsx",
                                file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
                                file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx") {
   # if(file == system.file("extdata", "files.xlsx", package = "SlimStampeRData")) {
   #   message("Example dataset was used: excel sample")
   # }
-  cat("This may take a few minutes... \n Rows with missing data are removed. \n")
-  start_time <- format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss")
-  cat(start_time, "\n")
+  if(missing(lessons)){
+    stop("No lessons are provided. Please provide lessonId's in a vector format: c(1, 2)")
+  }
+  cat("For big files this may take a few minutes. \n Rows with missing data are removed. \n")
+  # start_time <- format(Sys.time(), "%Hh%Mm%Ss")
+  # cat("Start time: ", start_time, "\n")
+
 
   out <- list()
 
@@ -28,10 +32,11 @@ read_dataset_excel <- function(lessons = 27, file_response = "../SlimStampen_dat
 
   renamedResponse = dplyr::rename(out$dataResponse, "userId" = "user_id", "factId_gen" = "fact_id", "lessonId" = "lesson_id")
 
-  # Filter dataResponse on lessonId from input (tbd)
+  # Filter dataResponse on lessonId from input
+  filterResponse <- filterdata(renamedResponse, lessons)
 
   # Parse JSON
-  out$parsedResponse <- colBindJson(renamedResponse)
+  out$parsedResponse <- colBindJson(filterResponse)
 
   #Gathering data
   lessonResponse <- findlesson(out$parsedResponse, out$dataLesson)
@@ -66,8 +71,10 @@ read_dataset_excel <- function(lessons = 27, file_response = "../SlimStampen_dat
   #   cat("! No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data \n")
   # }
 
-  end_time <- format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss")
-  cat(end_time, "\n")
+  # end_time <- format(Sys.time(), "%Hh%Mm%Ss")
+  # cat("End time: ", end_time, "\n")
+
+  cat("Done! \n")
 
   return(out)
 }
@@ -90,15 +97,19 @@ colBindJson <- function(dataFrame) {
   # Set column headers from parsed json
   colnames(jsonData) <- names(newList)
 
-
-  # start_time <- format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss")
-  # cat(start_time, "\n")
   counter = 0;
 
+  datarows <- nrow(dataFrame)
+  cat("Processing ", datarows, " rows. \n")
+  cat("Progress: \n 0 %...")
   # read JSON and convert to data.frame row
-  for (rowNumber in 1:nrow(dataFrame)) {
+  for (rowNumber in 1:datarows) {
+    if(datarows < 1000){
+      if(rowNumber%%100 == 0) {cat(round((rowNumber/datarows)*100),"%...")}
+    } else {
+      if(rowNumber%%1000 == 0) {cat(round((rowNumber/datarows)*100),"%...")}
+    }
     # cat("rownumber", rowNumber, "\n")
-    if(rowNumber%%1000 == 0) {cat("rownumber", rowNumber, "\n")}
 
     dataList <- jsonToDataFrame(dataFrame$data[rowNumber])
 
@@ -114,10 +125,9 @@ colBindJson <- function(dataFrame) {
   jsonData <- as.data.frame(lapply(jsonData, type.convert, as.is = TRUE))
 
   combinedDF <- cbind(dataFrame, jsonData)
-  # end_time <- format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss")
-  # cat(end_time, "\n")
+
   if(counter > 0){
-    cat(counter, "row(s) were removed. \n")
+    cat("\n", counter, "row(s) were removed. \n")
   }
 
   return(combinedDF)
@@ -134,6 +144,12 @@ findfact <- function(dataframe, factInfo) {
   dataframe$factAnswer <- factInfo$answer[match(dataframe$factId, factInfo$id)]
 
   return(dataframe)
+}
+
+filterdata <- function(data, lessons) {
+  data <- dplyr::filter(data, lessonId %in% lessons)
+
+  return(data)
 }
 
 
