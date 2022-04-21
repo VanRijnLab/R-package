@@ -45,10 +45,6 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
 
 
 
-
-
-
-
   cols <- c("factId", "userId", "sessionTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
             "factText")
   missingcol <- missing_columns_check(out$finalResponse, cols)
@@ -77,19 +73,56 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
   cat("Done! \n")
 
   return(out$finalResponse)
+  # return(out)
 }
 
-jsonToDataFrame <- function(string) {
+jsonToDataFrame <- function(string, newList) {
   parsedJSON <- rjson::fromJSON(json_str =gsub("null", "\"\"", string))
   # parsedJSON <- do.call(c, jsonlite:::null_to_na(jsonlite::fromJSON(string)))
-  parsedJSON[[14]] = NULL
-  parsedJSON[[12]] = NULL
-  parsedJSON[[8]] = NULL
+
+  parsedJSON[["alternatives"]] = NULL
+  parsedJSON[["keyStrokes"]] = NULL
+  parsedJSON[["modelParameters"]] = NULL
+
+  # find out what data is missing
+  target <- names(parsedJSON)
+  pop <- names(newList)
+  missingName <- pop[!(pop%in%target)]
+  extraName <- target[!(target%in%pop)]
+
+  if(length(parsedJSON) != length(newList) || length(missingName) != 0){
+    # cat("missing: ", missingName, "\n")
+    # cat("extra: ", extraName, "\n")
+
+    # remove extra data
+    for (extra in extraName) {
+      parsedJSON[[extra]] = NULL
+    }
+    # fill missing data with NA values
+    for (name in missingName) {
+      x <- match(name, names(newList))
+      parsedJSON <- append(parsedJSON, NA, after = (x-1))
+      names(parsedJSON)[x] <- name
+    }
+  }
+  if(parsedJSON[["reactionTime"]] == "") {parsedJSON[["reactionTime"]] <- NA}
+
+  return(parsedJSON)
+}
+
+dataTemplate <- function(string) {
+  parsedJSON <- rjson::fromJSON(json_str =gsub("null", "\"\"", string))
+  parsedJSON[["alternatives"]] = NULL
+  parsedJSON[["keyStrokes"]] = NULL
+  parsedJSON[["modelParameters"]] = NULL
+
   return(parsedJSON)
 }
 
 colBindJson <- function(dataFrame) {
-  newList <- jsonToDataFrame(dataFrame$data[1])
+  newList <- dataTemplate(dataFrame$data[1])
+  datacols <- length(newList)
+  # newList <- jsonToDataFrame(dataFrame$data[1])
 
   # Create empty data from for json data
   jsonData <- data.frame(matrix(NA, nrow = nrow(dataFrame), ncol = length(newList)))
@@ -98,6 +131,8 @@ colBindJson <- function(dataFrame) {
   colnames(jsonData) <- names(newList)
 
   counter = 0;
+  # wrongrows <- list()
+  # wrongrows[[1]] <- newList
 
   datarows <- nrow(dataFrame)
   cat("Processing ", datarows, " rows. \n")
@@ -111,15 +146,16 @@ colBindJson <- function(dataFrame) {
     }
     # cat("rownumber", rowNumber, "\n")
 
-    dataList <- jsonToDataFrame(dataFrame$data[rowNumber])
+    dataList <- jsonToDataFrame(dataFrame$data[rowNumber], newList)
 
     if(length(dataList) == length(newList)) {
-      if(dataList$reactionTime == "") {dataList$reactionTime <- NA}
       dataDf <- as.data.frame(matrix(unlist(dataList),nrow=length(dataList),byrow=TRUE))
       # Transpose the list (which is interpreted as a column), to a row
       jsonData[rowNumber,] <- t(dataDf[1])
     } else {
       counter = counter + 1
+      # cat("wrong row: ", rowNumber, "\n")
+      # wrongrows[[counter+2]] <- dataList
     }
   }
   jsonData <- as.data.frame(lapply(jsonData, type.convert, as.is = TRUE))
