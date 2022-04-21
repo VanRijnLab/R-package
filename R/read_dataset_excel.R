@@ -72,8 +72,8 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
 
   cat("Done! \n")
 
-  return(out$finalResponse)
-  # return(out)
+  # return(out$finalResponse)
+  return(out)
 }
 
 jsonToDataFrame <- function(string, newList) {
@@ -115,6 +115,12 @@ dataTemplate <- function(string) {
   parsedJSON[["alternatives"]] = NULL
   parsedJSON[["keyStrokes"]] = NULL
   parsedJSON[["modelParameters"]] = NULL
+  for (i in 1:length(parsedJSON)) {
+    if(is.list(parsedJSON[[i]])){
+      parsedJSON[[i]] <- NULL
+    }
+
+  }
 
   return(parsedJSON)
 }
