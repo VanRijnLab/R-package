@@ -10,7 +10,8 @@
 #'
 read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_examples/vocatrainer/medium_response.xlsx",
                                file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
-                               file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx") {
+                               file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx",
+                               file_dir = "../SlimStampen_data_examples/vocatrainer") {
   # if(file == system.file("extdata", "files.xlsx", package = "SlimStampeRData")) {
   #   message("Example dataset was used: excel sample")
   # }
@@ -20,6 +21,8 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
   cat("For big files this may take a few minutes. \n Rows with missing data are removed. \n")
   # start_time <- format(Sys.time(), "%Hh%Mm%Ss")
   # cat("Start time: ", start_time, "\n")
+
+  files <- readDirectory(file_dir)
 
 
   out <- list()
@@ -196,6 +199,23 @@ filterdata <- function(data, lessons) {
   data <- dplyr::filter(data, lessonId %in% lessons)
 
   return(data)
+}
+
+readDirectory <- function(file_dir) {
+  files <- list()
+  factfiles <- list.files(file_dir, pattern='fact\\.xlsx$')
+  lessonfiles <- list.files(file_dir, pattern='lesson\\.xlsx$')
+  responsefiles <- list.files(file_dir, pattern='response\\.xlsx$')
+
+  factpath <- file.path(file_dir, factfiles[1])
+  lessonpath <- file.path(file_dir, lessonfiles[1])
+  responsepath <- file.path(file_dir, responsefiles[1])
+
+  files$fact <- factpath
+  files$lesson <- lessonpath
+  files$response <- responsepath
+
+  return(files)
 }
 
 
