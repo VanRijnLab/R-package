@@ -35,6 +35,10 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
   # Filter dataResponse on lessonId from input
   filterResponse <- filterdata(renamedResponse, lessons)
 
+  if(nrow(filterResponse) == 0) {
+    stop("No trials for these lessons present in the file, please select other lessons.")
+  }
+
   # Parse JSON
   out$parsedResponse <- colBindJson(filterResponse)
 
@@ -105,7 +109,7 @@ jsonToDataFrame <- function(string, newList) {
       names(parsedJSON)[x] <- name
     }
   }
-  if(parsedJSON[["reactionTime"]] == "") {parsedJSON[["reactionTime"]] <- NA}
+  if(!is.na(parsedJSON[["reactionTime"]]) && parsedJSON[["reactionTime"]] == "") {parsedJSON[["reactionTime"]] <- NA}
 
   return(parsedJSON)
 }
