@@ -8,30 +8,50 @@
 #' @return data frame
 #' @export
 #'
-read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_examples/vocatrainer/medium_response.xlsx",
-                               file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
-                               file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx",
-                               file_dir = "../SlimStampen_data_examples/vocatrainer") {
-  # if(file == system.file("extdata", "files.xlsx", package = "SlimStampeRData")) {
-  #   message("Example dataset was used: excel sample")
-  # }
-  if(missing(lessons)){
+read_dataset_excel <- function(lessons = NULL, file_response = NULL,
+                               file_lesson = NULL, file_fact = NULL,
+                               file_dir = NULL, exampleset = FALSE) {
+
+  cat("For big files this may take a few minutes. \n")
+
+  if(exampleset == TRUE){
+    lessons = c(32, 26)
+
+    # file == system.file("extdata", "files.xlsx", package = "SlimStampeRData"
+    file_response = "../SlimStampen_data_examples/vocatrainer/medium_response.xlsx"
+    file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx"
+    file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx"
+    # file_dir = "../SlimStampen_data_examples/vocatrainer"
+    message("Example dataset was used: excel sample")
+  }
+
+  if(is.null(lessons)){
     stop("No lessons are provided. Please provide lessonId's in a vector format: c(1, 2)")
   }
-  cat("For big files this may take a few minutes. \n Rows with missing data are removed. \n")
-  # start_time <- format(Sys.time(), "%Hh%Mm%Ss")
-  # cat("Start time: ", start_time, "\n")
 
-  files <- readDirectory(file_dir)
+  if(is.null(file_dir) && (is.null(file_response) || is.null(file_fact) || is.null(file_lesson))) {
+    stop("Missing input files. Either provide a directory that contains the files or provide all three files as seperate input. (See documentation for more information)")
+
+  }
 
 
   out <- list()
+  if(!is.null(file_dir)){
+    files <- readDirectory(file_dir)
+    out$dataLesson <- readxl::read_excel(files$lesson, guess_max = 10000)
 
-  out$dataLesson <- readxl::read_excel(file_lesson, guess_max = 10000)
+    out$dataFact <- readxl::read_excel(files$fact, guess_max = 10000)
 
-  out$dataFact <- readxl::read_excel(file_fact, guess_max = 10000)
+    out$dataResponse <- readxl::read_excel(files$response, guess_max = 10000)
+    cat("files!")
+  } else {
+    out$dataLesson <- readxl::read_excel(file_lesson, guess_max = 10000)
 
-  out$dataResponse <- readxl::read_excel(file_response, guess_max = 10000)
+    out$dataFact <- readxl::read_excel(file_fact, guess_max = 10000)
+
+    out$dataResponse <- readxl::read_excel(file_response, guess_max = 10000)
+  }
+
 
   renamedResponse = dplyr::rename(out$dataResponse, "userId" = "user_id", "factId_gen" = "fact_id", "lessonId" = "lesson_id")
 
@@ -79,8 +99,8 @@ read_dataset_excel <- function(lessons, file_response = "../SlimStampen_data_exa
 
   cat("Done! \n")
 
-  # return(out$finalResponse)
-  return(out)
+  return(out$finalResponse)
+  # return(out)
 }
 
 jsonToDataFrame <- function(string, newList) {
@@ -206,6 +226,17 @@ readDirectory <- function(file_dir) {
   factfiles <- list.files(file_dir, pattern='fact\\.xlsx$')
   lessonfiles <- list.files(file_dir, pattern='lesson\\.xlsx$')
   responsefiles <- list.files(file_dir, pattern='response\\.xlsx$')
+
+  if(length(factfiles) < 1) {
+    stop("The fact file is not present in this directory. The file is expected to end with 'fact.xlsx'")
+  }
+  if( length(lessonfiles) < 1 ) {
+    stop("The lesson file is not present in this directory. The file is expected to end with 'lesson.xlsx'")
+
+  }
+  if(length(responsefiles) < 1 ) {
+    stop("The response file is not present in this directory. The file is expected to end with 'response.xlsx'")
+  }
 
   factpath <- file.path(file_dir, factfiles[1])
   lessonpath <- file.path(file_dir, lessonfiles[1])
