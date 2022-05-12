@@ -5,22 +5,48 @@
 \title{Read data set from excel files}
 \usage{
 read_dataset_excel(
- 
-    file_response = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_response.xlsx",
- 
-    file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx",
- 
-    file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx"
+  lessons = NULL,
+  file_response = NULL,
+  file_lesson = NULL,
+  file_fact = NULL,
+  file_dir = NULL,
+  exampleset = FALSE
 )
 }
 \arguments{
-\item{file}{Excel files. If no file is provided the example .xlsx file will
-be loaded.}
+\item{lessons}{A vector that contains the lesson ID's that should be parsed.}
+
+\item{file_response}{Excel file with response entries.}
+
+\item{file_lesson}{Excel file with lesson data.}
+
+\item{file_fact}{Excel file with fact data.}
+
+\item{file_dir}{Directory that contains the excel files ending on
+"fact.xlsx", "lesson.xlsx" and "response.xlsx".}
+
+\item{exampleset}{If TRUE the example data set will be used and no excel
+files need to be provided. The default is FALSE, and either a directory or
+a set of 3 files need to be provided.}
 }
 \value{
 data frame
 }
 \description{
 \code{read_dataset_excel} reads the raw data set from multiple excel files
-into a data frame with the correct settings
+into a data frame with the correct settings.
 }
+\details{
+Three files need to be provided to parse the excel files correctly. These are
+the files containing the responses, the lesson data and the fact data. The
+file path to these files can either be provided individually or a directory
+containing these files can be provided. If a directory is provided the files
+must end on "fact.xlsx", "lesson.xlsx" and "response.xlsx" to be recognized.
+Only one file ending on each of these strings should be present in the
+directory, otherwise the wrong files may be selected.
+
+If one of your files is placed in a different directory or does not end on
+the correct string, it is necessary to provide all three files with their
+individual file path and to not provide a directory.
+}
+\concept{import data functions}
