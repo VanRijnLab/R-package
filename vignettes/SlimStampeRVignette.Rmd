@@ -17,8 +17,11 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-This package is used to analyze SlimStampen App data. To use this package you need a .csv file with the data from the SlimStampen lessons that you want to analyze. 
+This package is used to analyze SlimStampen App data. To use this package you need a .csv file or a set of .xlsx files with the data from the SlimStampen lessons that you want to analyze. Below will be explained how to import data from CSV and Excel files.
+
 The functions in this package are focused on giving a general overview of what the data looks like, not to provide specific statistical analyses.
+
+It should be noted that the calculation of alpha estimates is accurate when each user has at most one session in a lesson, but cannot be guaranteed when when users have several sessions or any lesson reset has been used. 
 
 To use this package you first need to call the `library()` function to load the package into your RStudio environment.
 
@@ -48,7 +51,7 @@ help(package = "SlimStampeRData")
 You may run into warning or error messages when you run the code in this vignette. At the end of this vignette is a section with common warning and error messages and their solutions.
 
 
-## Read data 
+## Read data from CSV file
 The `read_dataset()` function reads the data from your .csv file into RStudio, so you can use it as a data table. The `read_dataset()` function needs the location of the .csv file to be able to read it.
 
 ```{r, eval= FALSE}
@@ -63,6 +66,39 @@ When no location is given the example data set is used.
 ```{r}
 data <- read_dataset()
 ```
+
+
+## Read data from Excel files
+The `read_dataset_excel()` function reads the data from your .xlsx files into RStudio, so you can use it as a data table. The `read_dataset_excel()` function needs the location of the .xlsx files to be able to read them.
+There are two ways to provide the location of your Excel files, individually or by directory.
+
+If you provide the files individually you must provide the file path to three files: the response entries, the lesson data and the fact data. You must also provide the lesson Id's of the lessons you want to parse.
+
+```{r, eval= FALSE}
+# Not run
+# Example of possible individual Excel files locations
+data <- read_dataset_excel(lessons = c(23, 45), file_response = "C:/Users/YourName/x_response.xlsx", file_lesson = "C:/Users/YourName/x_lesson.xlsx", file_fact = "C:/Users/YourName/x_fact.xlsx")
+```
+
+If you provide a directory the three files will be selected automatically. However, for this to work correctly the files must end on "fact.xlsx", "lesson.xlsx" and "response.xlsx". There must also be only one file present in the directory that ends on each of these strings, otherwise the wrong file may be selected. If the files don't end on these strings or the files are not present in the same directory, then you must provide the file paths separately, as in the example above.
+
+When you provide a directory you must also provide the lesson Id's of the lessons you want to parse.
+
+
+```{r, eval= FALSE}
+# Not run
+# Example of Excel files directory location
+data <- read_dataset_excel(lessons = c(23, 45), file_dir = "C:/Users/YourName/dataFolder")
+```
+
+
+If you want to use the example data set you must set the example parameter to TRUE.
+
+```{r, eval= FALSE}
+# Not run
+data <- read_dataset_excel(exampleset = TRUE)
+```
+
 
 ## First look
 The function `dataset_stats()` gives a quick summary of the data set. It is easiest to save the output in a variable, so the participant table can be accessed later on. Because this table can be very long it is not printed in the standard output.
