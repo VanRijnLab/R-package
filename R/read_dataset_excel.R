@@ -37,13 +37,11 @@ read_dataset_excel <- function(lessons = NULL, file_response = NULL,
   cat("For big files this may take a few minutes. \n")
 
   if(exampleset == TRUE){
-    lessons = c(32, 26)
+    lessons = c(38, 39)
 
-    # file == system.file("extdata", "files.xlsx", package = "SlimStampeRData"
-    file_response = "../SlimStampen_data_examples/vocatrainer/medium_response.xlsx"
-    file_lesson = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_lesson.xlsx"
-    file_fact = "../SlimStampen_data_examples/vocatrainer/nmd_live_vocatrainer_public_fact.xlsx"
-    # file_dir = "../SlimStampen_data_examples/vocatrainer"
+    file_response = system.file("extdata", "example_response.xlsx", package = "SlimStampeRData")
+    file_lesson = system.file("extdata", "example_lesson.xlsx", package = "SlimStampeRData")
+    file_fact = system.file("extdata", "example_fact.xlsx", package = "SlimStampeRData")
     message("Example dataset was used: excel sample")
   }
 
