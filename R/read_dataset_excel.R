@@ -63,7 +63,6 @@ read_dataset_excel <- function(lessons = NULL, file_response = NULL,
     out$dataFact <- readxl::read_excel(files$fact, guess_max = 10000)
 
     out$dataResponse <- readxl::read_excel(files$response, guess_max = 10000)
-    cat("files!")
   } else {
     out$dataLesson <- readxl::read_excel(file_lesson, guess_max = 10000)
 
@@ -113,9 +112,6 @@ read_dataset_excel <- function(lessons = NULL, file_response = NULL,
   # if(length(missingrep) > 0){
   #   cat("! No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data \n")
   # }
-
-  # end_time <- format(Sys.time(), "%Hh%Mm%Ss")
-  # cat("End time: ", end_time, "\n")
 
   cat("Done! \n")
 
