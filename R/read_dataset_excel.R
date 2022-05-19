@@ -221,7 +221,10 @@ colBindJson <- function(dataFrame) {
       # wrongrows[[counter+2]] <- dataList
     }
   }
-  jsonData <- as.data.frame(lapply(jsonData, type.convert, as.is = TRUE))
+
+  jsonData <- as.data.frame(lapply(jsonData, type.convert, as.is = TRUE, numerals = "no.loss"))
+  if("presentationStartTime" %in% names(jsonData)){jsonData$presentationStartTime <- bit64::as.integer64(jsonData$presentationStartTime)}
+
 
   combinedDF <- cbind(dataFrame, jsonData)
 
