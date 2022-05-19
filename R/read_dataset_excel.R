@@ -86,7 +86,9 @@ read_dataset_excel <- function(lessons = NULL, file_response = NULL,
 
   #Gathering data
   lessonResponse <- findlesson(out$parsedResponse, out$dataLesson)
-  out$finalResponse <- findfact(lessonResponse, out$dataFact)
+  factResponse <- findfact(lessonResponse, out$dataFact)
+
+  out$finalResponse <- addResetTime(factResponse)
 
 
 
@@ -282,4 +284,26 @@ readDirectory <- function(file_dir) {
   return(files)
 }
 
-
+addResetTime <- function(dataframe) {
+  # functions relies on presentationStartTime and sequence_number (otherwise
+  # skip and warning)
+  participants <- unique(dataframe$userId)
+  lessons <- unique(dataframe$lessonId)
+  df <- data.frame(lesson = 0, user = 0, starttime = bit64::as.integer64(0), seqnum = 0)
+  for (les in lessons) {
+    for(par in participants){
+      data1 <- dplyr::arrange(dplyr::filter(dataframe, lessonId == les & userId == par), sequence_number)
+      while(any(is.na(data1$presentationStartTime))){
+        index = which(is.na(data1$presentationStartTime))[1];
+        if(index == 1){
+          data1$presentationStartTime[index] <- 0
+        } else {
+          data1$presentationStartTime[index] <- data1$presentationStartTime[index-1]+1
+        }
+        rbind(df, data.frame(lesson = les, user = par, starttime = data1$presentationStartTime[index], seqnum = data1$sequence_number[index]))
+      }
+    }
+  }
+  # match dataframe to df
+  return(thedata)
+}
