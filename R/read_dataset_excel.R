@@ -158,20 +158,34 @@ dataTemplate <- function(string) {
   parsedJSON[["alternatives"]] = NULL
   parsedJSON[["keyStrokes"]] = NULL
   parsedJSON[["modelParameters"]] = NULL
-  for (i in 1:length(parsedJSON)) {
-    if(is.list(parsedJSON[[i]])){
-      parsedJSON[[i]] <- NULL
+  if(length(parsedJSON) > 0 ){
+    for (i in 1:length(parsedJSON)) {
+      if(is.list(parsedJSON[[i]])){
+        parsedJSON[[i]] <- NULL
+      }
     }
-
   }
+
 
   return(parsedJSON)
 }
 
 colBindJson <- function(dataFrame) {
-  newList <- dataTemplate(dataFrame$data[1])
+  maxRow <- 0
+  rownum <- NULL
+  temprow <- ifelse(nrow(dataFrame) > 10, 10, nrow(dataFrame))
+  for (i in 1:temprow) {
+    if (length(dataTemplate(dataFrame$data[i])) > maxRow){
+      maxRow = length(dataTemplate(dataFrame$data[i]));
+      rownum = i;
+    }
+  }
+  cat("maxrow: ", maxRow, "rownum: ", rownum, "\n")
+  if(is.null(rownum)){
+    stop("No data detected within the first 10 rows.")
+  }
+  newList <- dataTemplate(dataFrame$data[rownum])
   datacols <- length(newList)
-  # newList <- jsonToDataFrame(dataFrame$data[1])
 
   # Create empty data from for json data
   jsonData <- data.frame(matrix(NA, nrow = nrow(dataFrame), ncol = length(newList)))
