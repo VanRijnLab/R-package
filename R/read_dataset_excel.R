@@ -27,7 +27,18 @@
 #'   files need to be provided. The default is FALSE, and either a directory or
 #'   a set of 3 files need to be provided.
 #'
-#' @return data frame
+#' @return A data table. The output has the following properties:
+#'
+#' * The information contained in the data column from the response file is
+#' separated into individual columns. Except for properties that contain
+#' objects, which are not parsed.
+#' * All other data from the response file is
+#' preserved. From the lesson file the lesson title is added to the response
+#' entries. From the fact file the fact text and fact answer is added to the
+#' response entries.
+#' * A presentationStartTime is added to reset entries (with
+#' factId -1), which do not represent the time at which the reset was performed,
+#' but do represent the sequence of the entries.
 #' @export
 #'
 read_dataset_excel <- function(lessons = NULL, file_response = NULL,
@@ -86,9 +97,9 @@ read_dataset_excel <- function(lessons = NULL, file_response = NULL,
 
   #Gathering data
   lessonResponse <- findlesson(out$parsedResponse, out$dataLesson)
-  factResponse <- findfact(lessonResponse, out$dataFact)
+  out$combinedData <- findfact(lessonResponse, out$dataFact)
 
-  out$finalResponse <- addResetTime(factResponse)
+  out$finalResponse <- addResetTime(out$combinedData)
 
 
 
@@ -289,7 +300,7 @@ addResetTime <- function(dataframe) {
   # skip and warning)
   participants <- unique(dataframe$userId)
   lessons <- unique(dataframe$lessonId)
-  df <- data.frame(lesson = 0, user = 0, starttime = bit64::as.integer64(0), seqnum = 0)
+  df <- data.frame(lessonId = 0, userId = 0, StartTime = bit64::as.integer64(0), sequence_number = 0)
   for (les in lessons) {
     for(par in participants){
       data1 <- dplyr::arrange(dplyr::filter(dataframe, lessonId == les & userId == par), sequence_number)
@@ -300,10 +311,14 @@ addResetTime <- function(dataframe) {
         } else {
           data1$presentationStartTime[index] <- data1$presentationStartTime[index-1]+1
         }
-        rbind(df, data.frame(lesson = les, user = par, starttime = data1$presentationStartTime[index], seqnum = data1$sequence_number[index]))
+        df <- rbind(df, data.frame(lessonId = les, userId = par, StartTime = data1$presentationStartTime[index], sequence_number = data1$sequence_number[index]))
       }
     }
   }
   # match dataframe to df
-  return(thedata)
+  joindata <- left_join(dataframe, df, by = c("lessonId", "userId", "sequence_number"))
+  mergetime <- mutate(joindata, presentationStartTime= coalesce(presentationStartTime, StartTime))
+  selectdata <- select(mergetime, -StartTime)
+
+  return(selectdata)
 }
