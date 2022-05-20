@@ -30,7 +30,19 @@ files need to be provided. The default is FALSE, and either a directory or
 a set of 3 files need to be provided.}
 }
 \value{
-data frame
+A data table. The output has the following properties:
+\itemize{
+\item The information contained in the data column from the response file is
+separated into individual columns. Except for properties that contain
+objects, which are not parsed.
+\item All other data from the response file is
+preserved. From the lesson file the lesson title is added to the response
+entries. From the fact file the fact text and fact answer is added to the
+response entries.
+\item A presentationStartTime is added to reset entries (with
+factId -1), which do not represent the time at which the reset was performed,
+but do represent the sequence of the entries.
+}
 }
 \description{
 \code{read_dataset_excel} reads the raw data set from multiple excel files
