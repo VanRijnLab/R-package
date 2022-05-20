@@ -1,6 +1,10 @@
 # SlimStampeRData
 This R package helps you with analyzing data from the App-version of SlimStampen.
 
+:warning: Beware that calculation of the alpha is only guaranteed to be accurate when each user only has one session per lesson. 
+This is true for the current (0.1.0) and previous (0.0.0.9000) version of the package and will be changed in the future. :warning:
+
+
 ## Beginner guide
 If you are new to RStudio, please follow these steps.
 
