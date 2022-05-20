@@ -300,10 +300,12 @@ addResetTime <- function(dataframe) {
   participants <- unique(dataframe$userId)
   lessons <- unique(dataframe$lessonId)
   df <- data.frame(lessonId = 0, userId = 0, StartTime = bit64::as.integer64(0), sequence_number = 0)
+  foundreset = 0;
   for (les in lessons) {
     for(par in participants){
       data1 <- dplyr::arrange(dplyr::filter(dataframe, lessonId == les & userId == par), sequence_number)
       while(any(is.na(data1$presentationStartTime))){
+        foundreset = 1;
         index = which(is.na(data1$presentationStartTime))[1];
         if(index == 1){
           data1$presentationStartTime[index] <- 0
@@ -318,6 +320,10 @@ addResetTime <- function(dataframe) {
   joindata <- left_join(dataframe, df, by = c("lessonId", "userId", "sequence_number"))
   mergetime <- mutate(joindata, presentationStartTime= coalesce(presentationStartTime, StartTime))
   selectdata <- select(mergetime, -StartTime)
+
+  if(foundreset){
+    cat("\n - Reset entries have been found, presentationStartTime is being estimated. - \n")
+  }
 
   return(selectdata)
 }
