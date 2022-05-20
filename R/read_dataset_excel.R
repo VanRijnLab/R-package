@@ -193,7 +193,6 @@ colBindJson <- function(dataFrame) {
       rownum = i;
     }
   }
-  cat("maxrow: ", maxRow, "rownum: ", rownum, "\n")
   if(is.null(rownum)){
     stop("No data detected within the first 10 rows.")
   }
