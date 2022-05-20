@@ -234,7 +234,7 @@ colBindJson <- function(dataFrame) {
     }
   }
 
-  jsonData <- as.data.frame(lapply(jsonData, type.convert, as.is = TRUE, numerals = "no.loss"))
+  jsonData <- as.data.frame(lapply(jsonData, utils::type.convert, as.is = TRUE, numerals = "no.loss"))
   if("presentationStartTime" %in% names(jsonData)){jsonData$presentationStartTime <- bit64::as.integer64(jsonData$presentationStartTime)}
 
 
@@ -317,9 +317,9 @@ addResetTime <- function(dataframe) {
     }
   }
   # match dataframe to df
-  joindata <- left_join(dataframe, df, by = c("lessonId", "userId", "sequence_number"))
-  mergetime <- mutate(joindata, presentationStartTime= coalesce(presentationStartTime, StartTime))
-  selectdata <- select(mergetime, -StartTime)
+  joindata <- dplyr::left_join(dataframe, df, by = c("lessonId", "userId", "sequence_number"))
+  mergetime <- dplyr::mutate(joindata, presentationStartTime= dplyr::coalesce(presentationStartTime, StartTime))
+  selectdata <- dplyr::select(mergetime, -StartTime)
 
   if(foundreset){
     cat("\n - Reset entries have been found, presentationStartTime is being estimated. - \n")
