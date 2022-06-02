@@ -299,7 +299,7 @@ addResetTime <- function(dataframe) {
   # skip and warning)
   participants <- unique(dataframe$userId)
   lessons <- unique(dataframe$lessonId)
-  df <- data.frame(lessonId = 0, userId = 0, StartTime = bit64::as.integer64(0), sequence_number = 0)
+  df <- data.frame(lessonId = 0, userId = 0, StartTime = bit64::as.integer64(0), sequence_number = 0, fact = -1)
   foundreset = 0;
   for (les in lessons) {
     for(par in participants){
@@ -312,14 +312,14 @@ addResetTime <- function(dataframe) {
         } else {
           data1$presentationStartTime[index] <- data1$presentationStartTime[index-1]+1
         }
-        df <- rbind(df, data.frame(lessonId = les, userId = par, StartTime = data1$presentationStartTime[index], sequence_number = data1$sequence_number[index]))
+        df <- rbind(df, data.frame(lessonId = les, userId = par, StartTime = data1$presentationStartTime[index], sequence_number = data1$sequence_number[index], fact = -1))
       }
     }
   }
   # match dataframe to df
   joindata <- dplyr::left_join(dataframe, df, by = c("lessonId", "userId", "sequence_number"))
-  mergetime <- dplyr::mutate(joindata, presentationStartTime= dplyr::coalesce(presentationStartTime, StartTime))
-  selectdata <- dplyr::select(mergetime, -StartTime)
+  mergetime <- dplyr::mutate(joindata, presentationStartTime= dplyr::coalesce(presentationStartTime, StartTime), factId= dplyr::coalesce(factId, fact))
+  selectdata <- dplyr::select(mergetime, -StartTime, -fact)
 
   if(foundreset){
     cat("\n - Reset entries have been found, presentationStartTime is being estimated. - \n")
