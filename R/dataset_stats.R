@@ -28,6 +28,11 @@ dataset_stats <- function(data) {
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   participants = unique(data$userId)
   nrparticipants = length(participants)
 
@@ -61,7 +66,7 @@ dataset_stats <- function(data) {
     factsPerPart[i] <- length(unique(dat1$factId))
   }
   out <- list()
-  out$general <- data.frame(descriptives = c("Total participants", "Total facts", "Total lessons", "Fact-user combinations"),
+  out$general <- data.frame(descriptives = c("Total unique participants", "Total facts", "Total lessons", "Fact-user combinations"),
                    values = c(nrparticipants, nrfacts, nrlessons, nrfactsuser))
   out$lessons <- data.frame(lessons = lessons,
                     participants = partPerLesson, facts = factsPerLesson, user_facts = userfactsPerLesson, RT = RTPerLesson, accuracy = AccPerLesson)

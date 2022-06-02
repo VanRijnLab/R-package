@@ -19,12 +19,18 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   if(missing(data)){
     stop("No data is provided")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
-  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
-  cat("This may take a moment... \n")
+  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
+
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
+  cat("This may take a few minutes for large datasets... \n")
 
 
   participants <- unique(data$sessionId)
@@ -34,9 +40,9 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
     datalistPar = list()
     dat1 <- dplyr::filter(data, sessionId == participants[j])
     facts <- unique(dat1$factId)
-    dat1 <- dplyr::arrange(.data = dat1, sessionTime)
+    dat1 <- dplyr::arrange(.data = dat1, presentationStartTime)
     dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
-                          fact_id = factId, text = factText, start_time = sessionTime,
+                          fact_id = factId, text = factText, start_time = presentationStartTime,
                           rt = reactionTime, correct = correct)
     for (i in seq_along(facts)) {
       datfact <- dplyr::filter(dat1, factId == facts[i])
@@ -51,7 +57,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
     datalistTotal[[j]] <- datParticipant
   }
   datTotal <- data.table::rbindlist(datalistTotal)
-  datSortTime <- datTotal[with(datTotal, order(sessionTime)),]
+  datSortTime <- datTotal[with(datTotal, order(presentationStartTime)),]
   datSortParticipant <- datSortTime[with(datSortTime, order(sessionId)),]
   cat("Done! \n")
   return(datSortParticipant)

@@ -37,7 +37,14 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "correct", "alpha"))
+
+
 
   sessionflag <- FALSE
 

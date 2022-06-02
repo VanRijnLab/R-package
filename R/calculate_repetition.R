@@ -18,6 +18,12 @@ calculate_repetition <- function(data) {
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
+
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   cat("This may take a moment... \n")
 
   participants <- unique(data$sessionId)

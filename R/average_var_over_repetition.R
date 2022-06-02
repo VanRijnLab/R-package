@@ -36,6 +36,11 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
     stop("ylim must be a vector of 2")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "reactionTime", "repetition"))
 
   participants <- sort(unique(data$sessionId))
@@ -118,6 +123,11 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
     stop("ylim must be a vector of 2")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "alpha", "repetition"))
 
   participants <- sort(unique(data$sessionId))
@@ -193,6 +203,11 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
   missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
+  }
+
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
   }
 
   missing_values_message(data, c("sessionId", "correct", "repetition"))
@@ -297,6 +312,11 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
   missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", factNames))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
+  }
+
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
   }
 
   missing_values_message(data, c("sessionId", "alpha", "repetition", "factId", factNames))
