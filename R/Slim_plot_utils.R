@@ -49,3 +49,12 @@ missing_columns_check <- function(data, columns) {
 title_time <- function() {
   return (format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss"))
 }
+
+resetremoval <- function(df) {
+  dfgroup <- dplyr::group_by(df, lessonId, userId)
+  dfsort <- dplyr::arrange(dfgroup, presentationStartTime, .by_group = TRUE)
+  dfslice <- dplyr::slice(dfsort, max(which(factId == -1), 1):n())
+  dfclean <- dplyr::filter(dfslice, !factId==-1)
+
+  return(dfclean)
+}
