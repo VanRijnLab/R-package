@@ -27,26 +27,12 @@ calculate_repetition <- function(data) {
 
   cat("This may take a moment... \n")
 
-  participants <- unique(data$sessionId)
-  datalistTotal = list()
+  groupdata <- dplyr::group_by(data, lessonId, userId, factId)
+  sortdata <- dplyr::arrange(groupdata, presentationStartTime, .by_group = TRUE)
+  mutatedata <- dplyr::mutate(sortdata, repetition = 0:(dplyr::n()-1))
+  totaldata <- dplyr::arrange(mutatedata, presentationStartTime)
 
-  for (j in seq_along(participants)) {
-    datalistPar = list()
-    dat1 <- dplyr::filter(data, sessionId == participants[j])
-    facts <- unique(dat1$factId)
-    dat1 <- dplyr::arrange(.data = dat1, sessionTime)
-    for (i in seq_along(facts)) {
-      datfact <- dplyr::filter(dat1, factId == facts[i])
-      datfact <- dplyr::mutate(.data = datfact, repetition = 0:(dplyr::n()-1))
-      datalistPar[[i]] <- datfact
-    }
-    datParticipant <- data.table::rbindlist(datalistPar)
-    datalistTotal[[j]] <- datParticipant
-  }
-  datTotal <- data.table::rbindlist(datalistTotal)
-  datSortTime <- datTotal[with(datTotal, order(sessionTime)),]
-  datSortParticipant <- datSortTime[with(datSortTime, order(sessionId)),]
   cat("Done! \n")
-  return(datSortParticipant)
+  return(totaldata)
 
 }
