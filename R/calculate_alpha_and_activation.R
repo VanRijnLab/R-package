@@ -35,34 +35,40 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   cat("This may take a few minutes for large datasets... \n")
 
 
-  participants <- unique(data$sessionId)
-  datalistTotal = list()
 
-  for (j in seq_along(participants)) {
-    datalistPar = list()
-    dat1 <- dplyr::filter(data, sessionId == participants[j])
-    facts <- unique(dat1$factId)
-    dat1 <- dplyr::arrange(.data = dat1, presentationStartTime)
-    dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
-                          fact_id = factId, text = factText, start_time = presentationStartTime,
-                          rt = reactionTime, correct = correct)
-    for (i in seq_along(facts)) {
-      datfact <- dplyr::filter(dat1, factId == facts[i])
-      alpha_activation <- calculate_activation_and_alpha_all(id = facts[i], factalpha = standardAlpha,
-                                                             responses = dat2, min_alpha = minAlpha,
-                                                             max_alpha = maxAlpha)
-      datfact$alpha <- alpha_activation$alpha
-      datfact$activation <- alpha_activation$activation
-      datalistPar[[i]] <- datfact
+  lessons <- unique(data$lessonId)
+  datalistTotal = list()
+  for (k in seq_along(lessons)) {
+    participants <- unique(data$userId)
+    datalistless = list()
+
+    for (j in seq_along(participants)) {
+      datalistPar = list()
+      dat1 <- dplyr::filter(data, lessonId == lessons[k], userId == participants[j])
+      facts <- unique(dat1$factId)
+      dat1 <- dplyr::arrange(.data = dat1, presentationStartTime)
+      dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
+                            fact_id = factId, text = factText, start_time = presentationStartTime,
+                            rt = reactionTime, correct = correct)
+      for (i in seq_along(facts)) {
+        datfact <- dplyr::filter(dat1, factId == facts[i])
+        alpha_activation <- calculate_activation_and_alpha_all(id = facts[i], factalpha = standardAlpha,
+                                                               responses = dat2, min_alpha = minAlpha,
+                                                               max_alpha = maxAlpha)
+        datfact <- cbind(datfact, alpha_activation)
+        datalistPar[[i]] <- datfact
+      }
+      datParticipant <- data.table::rbindlist(datalistPar)
+      datalistless[[j]] <- datParticipant
     }
-    datParticipant <- data.table::rbindlist(datalistPar)
-    datalistTotal[[j]] <- datParticipant
+    datlesson <- data.table::rbindlist(datalistless)
+    datalistTotal[[k]] <- datlesson
+
   }
   datTotal <- data.table::rbindlist(datalistTotal)
   datSortTime <- datTotal[with(datTotal, order(presentationStartTime)),]
-  datSortParticipant <- datSortTime[with(datSortTime, order(sessionId)),]
   cat("Done! \n")
-  return(datSortParticipant)
+  return(datSortTime)
 
 }
 
