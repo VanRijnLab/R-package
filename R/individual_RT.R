@@ -32,7 +32,7 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
     stop("ylim must be a vector of 2")
   }
 
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct", "lessonId", "userId", "presentationStartTime"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }

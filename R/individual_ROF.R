@@ -32,7 +32,7 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "alpha", "correct"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "alpha", "correct", "lessonId", "userId", "presentationStartTime"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }

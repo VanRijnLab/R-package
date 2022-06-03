@@ -1,7 +1,8 @@
 #' Calculate fact activation and alpha (rate of forgetting)
 #'
-#' Returns the data frame with a column for activation and alpha for all trials. This will
-#' override existing columns called 'alpha' or 'activation'.
+#' Returns the data frame with a column for activation and alpha for all trials.
+#' This will override existing columns called 'alpha' or 'activation'. This data
+#' frame will not contain any data that has been reset.
 #'
 #' @family calculation functions
 #'
@@ -11,7 +12,8 @@
 #' @param fThreshold Threshold below which the user forgets a fact
 #' @param standardAlpha The default alpha that all items start with
 #'
-#' @return Original data frame with columns for activation and alpha
+#' @return Original data frame with columns for activation and alpha, without
+#'   reset data
 #' @export
 #'
 calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
@@ -19,7 +21,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   if(missing(data)){
     stop("No data is provided")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct", "lessonId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -27,7 +29,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
 
   if(-1 %in% data$factId){
     data <- resetremoval(data)
-    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+    cat("- There are resets present in the data. Reset data is removed. - \n")
   }
 
   cat("This may take a few minutes for large datasets... \n")

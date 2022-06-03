@@ -24,7 +24,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
   if(!("repetition" %in% colnames(data))){
     stop("No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "reactionTime", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "reactionTime", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -111,7 +111,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
   if(!("alpha" %in% colnames(data))){
     stop("No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -200,7 +200,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -309,7 +309,7 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", factNames))
+  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", "lessonId", "userId", "presentationStartTime", factNames))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
