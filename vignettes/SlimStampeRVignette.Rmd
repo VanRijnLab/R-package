@@ -194,7 +194,7 @@ individual_ROF(data, filepath = path)
 
 ***
 # Average of participants
-There are three functions that plot an average for a variable over all participants. These functions give a plot as output in which all lines represent a participant. On the x-axis the repetitions of facts is used. This is the amount of times that a fact has been presented to the participant.
+There are three functions that plot an average for a variable over all participants. For this average only the first session of every participant in every session is used, as to exclude any effects that can stem from the breaks between sessions. These functions give a plot as output in which all lines represent a session. On the x-axis the repetitions of facts is used. This is the amount of times that a fact has been presented to the participant.
 
 These functions give an error if your data set does not have a column with the number of repetition for each trial.
 
@@ -230,7 +230,7 @@ average_ROF_participants(data, filepath = path)
 
 ***
 # Average of facts
-There is one function that plots the average Rate of Forgetting over all facts. This function gives a plot as output in which all lines represent a fact.
+There is one function that plots the average Rate of Forgetting over all facts. This function gives a plot as output in which all lines represent a fact. Just like in the previous section, this function also uses the first session for every participant in a session to calculate the average.
 
 This function gives an error if your data set does not have a column with the number of repetition for each trial. See the section 'Average of participants' for more information.
 
