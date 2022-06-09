@@ -25,26 +25,42 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
-  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
 
   if(-1 %in% data$factId){
     data <- resetremoval(data)
     cat("- There are resets present in the data. Reset data is removed. - \n")
   }
 
-  cat("This may take a few minutes for large datasets... \n")
+  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
+
+  cat("This may take a few minutes... \n")
 
 
 
   lessons <- unique(data$lessonId)
+  totalLessons <- length(lessons)
   datalistTotal = list()
+
+  cat("Progress:")
   for (k in seq_along(lessons)) {
-    participants <- unique(data$userId)
+    lessondata <- dplyr::filter(data, lessonId == lessons[k])
+    participants <- unique(lessondata$userId)
     datalistless = list()
+    totalPart <- length(participants)
+    if(k != 1) {cat("Done!")}
+    cat("\n Analysing", k, "out of", totalLessons, "lessons (", totalPart ,"users ) \n")
+    cat("0 % ...")
 
     for (j in seq_along(participants)) {
+      if(totalPart<100){
+        if(j%%5 == 0) {cat(round((j/totalPart)*100),"% ...")}
+      } else {
+        if(j%%10 == 0) {cat(round((j/totalPart)*100),"% ...")}
+      }
+
+
       datalistPar = list()
-      dat1 <- dplyr::filter(data, lessonId == lessons[k], userId == participants[j])
+      dat1 <- dplyr::filter(lessondata, userId == participants[j])
       facts <- unique(dat1$factId)
       dat1 <- dplyr::arrange(.data = dat1, presentationStartTime)
       dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
@@ -67,7 +83,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   }
   datTotal <- data.table::rbindlist(datalistTotal)
   datSortTime <- datTotal[with(datTotal, order(presentationStartTime)),]
-  cat("Done! \n")
+  cat("\n All Done! \n")
   return(datSortTime)
 
 }
