@@ -55,6 +55,17 @@ resetremoval <- function(df) {
   dfsort <- dplyr::arrange(dfgroup, presentationStartTime, .by_group = TRUE)
   dfslice <- dplyr::slice(dfsort, max(which(factId == -1), 1):dplyr::n())
   dfclean <- dplyr::filter(dfslice, !factId==-1)
+  dffree <- dplyr::ungroup(dfclean)
 
-  return(dfclean)
+  return(dffree)
 }
+
+firstsession <- function(df) {
+  dfgroup <- dplyr::group_by(df, lessonId, userId)
+  dfsort <- dplyr::arrange(dfgroup, presentationStartTime, .by_group = TRUE)
+  dfclean <- dplyr::filter(dfsort, sessionId == unique(sessionId)[1])
+  dffree <- dplyr::ungroup(dfclean)
+  return(dffree)
+}
+
+
