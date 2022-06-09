@@ -275,8 +275,7 @@ warnings()
 ```
 
 ### Removed XX rows containing missing values (geom_point/geom_path)
-There are NA values in your data set. The plots for the sessionIds that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed after the function should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
-It is preferred to deal with NA values in some way, either removing them (if this makes sense in the data and methodology) or replacing them. For example, for a missing reaction time it is common to replace this NA value with the average reaction time of the participant or the maximum reaction time.
+There are NA values in your data set. The plots for the individual sessions that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed in the console after the function is called should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
 
 
 ### Error in grDevices::pdf(file = filename, ..., version = version) : cannot open file 'C:/example/file/path/filename.pdf'
