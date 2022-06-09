@@ -50,6 +50,6 @@ NULL
 if(getRversion() >= "2.15.1"){
   utils::globalVariables(c("factId", "userId", "sessionTime", "reactionTime", "correct", "alpha", "lessonTitle", "sessionId",
                            "factText", "repetition", "fact_id", "time", "mean_alpha", "mean_RT", "mean_accuracy", ".data",
-                           "lessonId", "sequence_number", "presentationStartTime", "StartTime"))
+                           "lessonId", "sequence_number", "presentationStartTime", "StartTime", "fact"))
 }
 
