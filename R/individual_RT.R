@@ -76,37 +76,68 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
   names(factcolor)  <- facts
 
   cat("This may take a moment... \n")
-  for (i in seq_along(participants)) {
-    dat1 <- dplyr::filter(data, sessionId == participants[i])
+  # for (i in seq_along(participants)) {
+  #   dat1 <- dplyr::filter(data, sessionId == participants[i])
+  #
+  #   dat3 <- NULL
+  #   if(normalizeTime){
+  #     dat2 <- dplyr::group_by(dat1, factId)
+  #     dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
+  #     dat3 <- dplyr::ungroup(dat3)
+  #   } else {
+  #     dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
+  #   }
+  #   # Make plot title
+  #   lesson <- unique(substr(dat3$lessonTitle, 1, 19))
+  #   user <- unique(dat3$userId)
+  #   plotTitle <- paste("Lesson: ", lesson[1], ",User: ", user[1])
+  #
+  #   # Make plot
+  #   plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
+  #     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+  #     ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
+  #     ggplot2::guides(colour = "none", fill = "none") +
+  #     ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
+  #     ggplot2::scale_color_manual(values = factcolor) +
+  #     ggplot2::coord_cartesian(xlim = x, ylim = y) +
+  #     ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+  #     ggplot2::ggtitle(plotTitle)
+  #   plots[[i]] <- plot
+  #   if(i < 5){
+  #     plots4[[i]] <- plot
+  #   }
+  # }
 
-    dat3 <- NULL
-    if(normalizeTime){
-      dat2 <- dplyr::group_by(dat1, factId)
-      dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
-      dat3 <- dplyr::ungroup(dat3)
-    } else {
-      dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
-    }
-    # Make plot title
-    lesson <- unique(substr(dat3$lessonTitle, 1, 19))
-    user <- unique(dat3$userId)
-    plotTitle <- paste("Lesson: ", lesson[1], ",User: ", user[1])
+  data <- dplyr::mutate(data, time = (sessionTime / 60000))
+  data$lessonTitle <- substr(data$lessonTitle, 1, 19)
 
-    # Make plot
-    plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = reactionTime)) +
-      ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
-      ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
-      ggplot2::guides(colour = "none", fill = "none") +
-      ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
-      ggplot2::scale_color_manual(values = factcolor) +
-      ggplot2::coord_cartesian(xlim = x, ylim = y) +
-      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
-      ggplot2::ggtitle(plotTitle)
-    plots[[i]] <- plot
-    if(i < 5){
-      plots4[[i]] <- plot
-    }
+  split_data <- split(data, list(data$lessonId, data$userId, data$sessionId), drop = TRUE)
+  data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = reactionTime)) +
+                      ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+                      ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
+                      ggplot2::guides(colour = "none", fill = "none") +
+                      ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
+                      ggplot2::scale_color_manual(values = factcolor) +
+                      ggplot2::coord_cartesian(xlim = x, ylim = y) +
+                      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+                      ggplot2::ggtitle( paste("Lesson: ", .x$lessonTitle[1], ",User: ", .x$userId[1])))
+
+  for (i in seq_along(data_plots)) {
+    plots[[i]] <- data_plots[[i]]
+      if(i < 5){
+        plots4[[i]] <- data_plots[[i]]
+      }
   }
+
+
+  # Mutate original data:
+  #   group by lesson and user
+  #   arange on presentationStartTime
+  #   dat3 <- dplyr::mutate(dat1, trialtime = (presentationStartTime - min(presentationStartTime) / 60000))
+  #   mutate(breaktime = presentationStartTime - lag(presentationStartTime))
+  #   assign session order
+
+
   res <- NULL
   title <- paste("Individual_RT_", title_time(), ".pdf")
   fileplace <- filepath
