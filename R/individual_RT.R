@@ -111,7 +111,11 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
                                         subtitle = paste("Session #", .x$sessionOrder[1], ",Since last session:", ms_to_string(.x$breakTime[1]) )))
 
   plots <- as.list(data_plots)
-  plots4 <- data_plots[1:4]
+  # plots4 <- data_plots[1:4]
+
+  plots <- plots[order(sapply(plots, function(x) x$data$userId[1]), sapply(plots, function(x) x$data$lessonId[1]), sapply(plots, function(x) x$data$sessionOrder[1]))]
+
+  plots4 <- plots[1:4]
 
 
   res <- NULL
@@ -129,7 +133,7 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
     cat("PDF of plot can be found in: ", fileplace, "\n")
 
   } else {
-    res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
+    res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2, byrow = FALSE)
 
     # Save all plots to a pdf file
     ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
