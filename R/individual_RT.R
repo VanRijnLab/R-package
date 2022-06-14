@@ -6,7 +6,7 @@
 #' @family individual functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
-#' @param sessionId Provide a single sessionId string to plot that session. If
+#' @param session Provide a single sessionId string to plot that session. If
 #'   sessionId is NULL all sessions will be plotted.
 #' @param normalizeTime If TRUE, the times of all facts will be normalized (they
 #'   will start at 0). If FALSE, the times will not be normalized and data
@@ -21,7 +21,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
-individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = NULL) {
+individual_RT <- function(data, session = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -45,17 +45,19 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
 
 
+  facts <- sort(unique(data$factId))
+  factcolor <- viridis::turbo(length(facts))
+  names(factcolor)  <- facts
 
   sessionflag <- FALSE
 
-  if(is.null(sessionId)){
-    participants <- sort(unique(data$sessionId))
-  } else {
-    if(!(is.character(sessionId) & length(sessionId) == 1)){
-      stop("SessionId is not a string")
+  if(!is.null(session)){
+    if(!(is.character(session) & length(session) == 1)){
+      stop("Session is not a string")
     }
     sessionflag <- TRUE
-    data <- dplyr::filter(data, sessionId == sessionId)
+    data <- dplyr::filter(data, sessionId == session)
+
   }
 
   plot <- NULL
@@ -69,10 +71,6 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
     x = xlim
   }
   y <- set_y(data$reactionTime, ylim)
-
-  facts <- sort(unique(data$factId))
-  factcolor <- viridis::turbo(length(facts))
-  names(factcolor)  <- facts
 
   cat("This may take a moment... \n")
 
@@ -133,16 +131,16 @@ individual_RT <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim = 
     cat("PDF of plot can be found in: ", fileplace, "\n")
 
   } else {
-    res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2, byrow = FALSE)
+    res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
 
     # Save all plots to a pdf file
-    ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
+    ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2, layout_matrix = matrix(1:4, 2, 2, TRUE)),
                     device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
     cat("Preview of the first 4 plots are displayed in viewer. \n")
     cat("PDF of plots can be found in: ", fileplace, "\n")
   }
   # Display plot
-  return(res)
+  return(plots)
 
 }
