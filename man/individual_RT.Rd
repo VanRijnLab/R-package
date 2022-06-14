@@ -6,7 +6,7 @@
 \usage{
 individual_RT(
   data,
-  sessionId = NULL,
+  session = NULL,
   normalizeTime = FALSE,
   xlim = NULL,
   ylim = NULL,
@@ -16,7 +16,7 @@ individual_RT(
 \arguments{
 \item{data}{A data frame. NA values will be removed before plotting.}
 
-\item{sessionId}{Provide a single sessionId string to plot that session. If
+\item{session}{Provide a single sessionId string to plot that session. If
 sessionId is NULL all sessions will be plotted.}
 
 \item{normalizeTime}{If TRUE, the times of all facts will be normalized (they
