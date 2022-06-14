@@ -21,7 +21,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
-individual_RT <- function(data, session = NULL, normalizeTime = FALSE, xlim = NULL, ylim = NULL, filepath = NULL) {
+individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithmic = FALSE xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -97,17 +97,34 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, xlim = NU
 
   split_data <- split(full_data, list(full_data$lessonId, full_data$userId, full_data$sessionId), drop = TRUE)
 
-  data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = reactionTime)) +
-                      ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
-                      ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
-                      ggplot2::guides(colour = "none", fill = "none") +
-                      ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
-                      ggplot2::scale_color_manual(values = factcolor) +
-                      ggplot2::coord_cartesian(xlim = x, ylim = y) +
-                      ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
-                      ggplot2::ggtitle( label = paste("Lesson: ", .x$lessonTitle[1], ",User: ", .x$userId[1]),
-                                        subtitle = paste("Session #", .x$sessionOrder[1], ",Since last session:", ms_to_string(.x$breakTime[1]) )))
+  data_plots <- NULL
+  if(logarithmic){
+    data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = reactionTime)) +
+                                              ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+                                              ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
+                                              ggplot2::guides(colour = "none", fill = "none") +
+                                              ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
+                                              ggplot2::scale_color_manual(values = factcolor) +
+                                              ggplot2::coord_cartesian(xlim = x, ylim = y) +
+                                              ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+                                              ggplot2::scale_y_log10() +
+                                              ggplot2::ggtitle( label = paste("Lesson: ", .x$lessonTitle[1], ",User: ", .x$userId[1]),
+                                                                subtitle = paste("Session #", .x$sessionOrder[1], ",Since last session:", ms_to_string(.x$breakTime[1]) )))
 
+
+  } else {
+    data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = reactionTime)) +
+                                              ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+                                              ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
+                                              ggplot2::guides(colour = "none", fill = "none") +
+                                              ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
+                                              ggplot2::scale_color_manual(values = factcolor) +
+                                              ggplot2::coord_cartesian(xlim = x, ylim = y) +
+                                              ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
+                                              ggplot2::ggtitle( label = paste("Lesson: ", .x$lessonTitle[1], ",User: ", .x$userId[1]),
+                                                                subtitle = paste("Session #", .x$sessionOrder[1], ",Since last session:", ms_to_string(.x$breakTime[1]) )))
+
+  }
   plots <- as.list(data_plots)
   # plots4 <- data_plots[1:4]
 
@@ -141,6 +158,6 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, xlim = NU
     cat("PDF of plots can be found in: ", fileplace, "\n")
   }
   # Display plot
-  return(plots)
+  return(res)
 
 }
