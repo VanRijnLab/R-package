@@ -21,7 +21,7 @@
 #' @param filepath A relative or explicit path where plots will be saved
 #' @return A preview plot in the viewer and a pdf file in filepath
 #' @export
-individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithmic = FALSE xlim = NULL, ylim = NULL, filepath = NULL) {
+individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithmic = FALSE, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
     stop("No data is provided")
   }
@@ -44,11 +44,12 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
 
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
 
-
+  # Assign colors to facts
   facts <- sort(unique(data$factId))
   factcolor <- viridis::turbo(length(facts))
   names(factcolor)  <- facts
 
+  # Single Session Settings
   sessionflag <- FALSE
 
   if(!is.null(session)){
@@ -60,11 +61,15 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
 
   }
 
-  plot <- NULL
+  # init plot lists
   plots <- list()
   plots4 <- list()
 
-  maxTime <- max(data$sessionTime)/60000
+  # Determine axis
+  sessiongroup <- dplyr::group_by(data, sessionId)
+  sessiontimes <- dplyr::summarise(sessiongroup, times = (max(presentationStartTime, na.rm = TRUE) - min(presentationStartTime, na.rm = TRUE))/60000)
+  maxTime <- max(sessiontimes$times, na.rm = TRUE)
+  cat("maxtime", maxTime)
   if(is.null(xlim)){
     x = c(0, maxTime)
   } else {
@@ -74,9 +79,8 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
 
   cat("This may take a moment... \n")
 
+  # Prepare data for graphs
   data <- dplyr::filter(data, !is.na(reactionTime))
-
-  data <- dplyr::mutate(data, time = (sessionTime / 60000))
   data$lessonTitle <- substr(data$lessonTitle, 1, 19)
 
   datagroup <- dplyr::group_by(data, lessonId, userId)
@@ -97,6 +101,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
 
   split_data <- split(full_data, list(full_data$lessonId, full_data$userId, full_data$sessionId), drop = TRUE)
 
+  # Plot graphs
   data_plots <- NULL
   if(logarithmic){
     data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = reactionTime)) +
@@ -107,7 +112,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
                                               ggplot2::scale_color_manual(values = factcolor) +
                                               ggplot2::coord_cartesian(xlim = x, ylim = y) +
                                               ggplot2::labs(x = "Time (minutes)", y = "Reaction Time (ms)") +
-                                              ggplot2::scale_y_log10() +
+                                              ggplot2::scale_y_log10(breaks = scales::log_breaks(n = 6, base = 10)) +
                                               ggplot2::ggtitle( label = paste("Lesson: ", .x$lessonTitle[1], ",User: ", .x$userId[1]),
                                                                 subtitle = paste("Session #", .x$sessionOrder[1], ",Since last session:", ms_to_string(.x$breakTime[1]) )))
 
@@ -126,13 +131,10 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
 
   }
   plots <- as.list(data_plots)
-  # plots4 <- data_plots[1:4]
-
   plots <- plots[order(sapply(plots, function(x) x$data$userId[1]), sapply(plots, function(x) x$data$lessonId[1]), sapply(plots, function(x) x$data$sessionOrder[1]))]
-
   plots4 <- plots[1:4]
 
-
+  # Print plots
   res <- NULL
   title <- paste("Individual_RT_", title_time(), ".pdf")
   fileplace <- filepath
@@ -157,7 +159,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
     cat("Preview of the first 4 plots are displayed in viewer. \n")
     cat("PDF of plots can be found in: ", fileplace, "\n")
   }
-  # Display plot
+
   return(res)
 
 }
