@@ -32,7 +32,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
     stop("ylim must be a vector of 2")
   }
 
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct", "lessonId", "userId", "presentationStartTime"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "reactionTime", "correct", "lessonId", "userId", "presentationStartTime"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -42,7 +42,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
     cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
   }
 
-  missing_values_message(data, c("sessionId", "factId", "sessionTime", "reactionTime", "correct"))
+  missing_values_message(data, c("sessionId", "factId", "reactionTime", "correct"))
 
   # Assign colors to facts
   facts <- sort(unique(data$factId))

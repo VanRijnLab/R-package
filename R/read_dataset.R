@@ -13,7 +13,7 @@ read_dataset <- function(file=system.file("extdata", "textcues_example.csv", pac
   }
 
   data <- data.table::fread(file)
-  cols <- c("factId", "userId", "sessionTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
+  cols <- c("factId", "userId", "presentationStartTime", "reactionTime", "correct", "lessonTitle", "lessonId","sessionId",
             "factText")
   missingcol <- missing_columns_check(data, cols)
 
