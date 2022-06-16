@@ -69,7 +69,6 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
   sessiongroup <- dplyr::group_by(data, sessionId)
   sessiontimes <- dplyr::summarise(sessiongroup, times = (max(presentationStartTime, na.rm = TRUE) - min(presentationStartTime, na.rm = TRUE))/60000)
   maxTime <- max(sessiontimes$times, na.rm = TRUE)
-  cat("maxtime", maxTime)
   if(is.null(xlim)){
     x = c(0, maxTime)
   } else {
