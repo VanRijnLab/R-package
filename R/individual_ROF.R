@@ -44,8 +44,12 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
 
   missing_values_message(data, c("sessionId", "factId", "sessionTime", "correct", "alpha"))
 
+  # Assign colors to facts
+  facts <- sort(unique(data$factId))
+  factcolor <- viridis::turbo(length(facts))
+  names(factcolor)  <- facts
 
-
+  # Single Session Settings
   sessionflag <- FALSE
 
   if(is.null(sessionId)){
@@ -59,10 +63,12 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     participants[1] <- sessionId
   }
 
+  # init plot lists
   plot <- NULL
   plots <- list()
   plots4 <- list()
 
+  # Determine axis
   maxTime <- max(data$sessionTime)/60000
   if(is.null(xlim)){
     x = c(0, maxTime)
@@ -75,42 +81,42 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     y = ylim
   }
 
-  facts <- sort(unique(data$factId))
-  factcolor <- viridis::turbo(length(facts))
-  names(factcolor)  <- facts
+
 
   cat("This may take a moment... \n")
-  for (i in seq_along(participants)) {
-    dat1 <- dplyr::filter(data, sessionId == participants[i])
+  # for (i in seq_along(participants)) {
+  #   dat1 <- dplyr::filter(data, sessionId == participants[i])
+  #
+  #   dat3 <- NULL
+  #   if(normalizeTime){
+  #     dat2 <- dplyr::group_by(dat1, factId)
+  #     dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
+  #     dat3 <- dplyr::ungroup(dat3)
+  #   } else {
+  #     dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
+  #   }
+  #   # Make plot title
+  #   lesson <- unique(substr(dat3$lessonTitle, 1, 19))
+  #   user <- unique(dat3$userId)
+  #   plotTitle <- paste("Lesson: ", lesson[1], ",User: ", user[1])
+  #
+  #   # Make plot
+  #   plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = alpha)) +
+  #     ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
+  #     ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
+  #     ggplot2::guides(colour = "none", fill = "none") +
+  #     ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
+  #     ggplot2::scale_color_manual(values = factcolor) +
+  #     ggplot2::coord_cartesian(xlim = x, ylim = y) +
+  #     ggplot2::labs(x = "Time (minutes)", y = "Alpha") +
+  #     ggplot2::ggtitle(plotTitle)
+  #   plots[[i]] <- plot
+  #   if(i < 5){
+  #     plots4[[i]] <- plot
+  #   }
+  # }
 
-    dat3 <- NULL
-    if(normalizeTime){
-      dat2 <- dplyr::group_by(dat1, factId)
-      dat3 <- dplyr::mutate(dat2, time = (sessionTime - min(sessionTime)) / 60000)
-      dat3 <- dplyr::ungroup(dat3)
-    } else {
-      dat3 <- dplyr::mutate(dat1, time = (sessionTime / 60000))
-    }
-    # Make plot title
-    lesson <- unique(substr(dat3$lessonTitle, 1, 19))
-    user <- unique(dat3$userId)
-    plotTitle <- paste("Lesson: ", lesson[1], ",User: ", user[1])
-
-    # Make plot
-    plot <- ggplot2::ggplot(data = dat3, ggplot2::aes(x = time, y = alpha)) +
-      ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
-      ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
-      ggplot2::guides(colour = "none", fill = "none") +
-      ggplot2::scale_fill_manual(values = c("TRUE"="grey", "FALSE"= "red", "1"="grey", "0"= "red")) +
-      ggplot2::scale_color_manual(values = factcolor) +
-      ggplot2::coord_cartesian(xlim = x, ylim = y) +
-      ggplot2::labs(x = "Time (minutes)", y = "Alpha") +
-      ggplot2::ggtitle(plotTitle)
-    plots[[i]] <- plot
-    if(i < 5){
-      plots4[[i]] <- plot
-    }
-  }
+  # Print plots
   res <- NULL
   title <- paste("Individual_ROF_", title_time(), ".pdf")
   fileplace <- filepath
@@ -129,7 +135,7 @@ individual_ROF <- function(data, sessionId = NULL, normalizeTime = FALSE, xlim =
     res <- cowplot::plot_grid(plotlist = plots4, nrow = 2, ncol = 2)
 
     # Save all plots to a pdf file
-    ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2),
+    ggplot2::ggsave(title, gridExtra::marrangeGrob(grobs = plots, nrow=2, ncol=2, layout_matrix = matrix(1:4, 2, 2, TRUE)),
                     device = "pdf", path = filepath, width = 22, height = 22, units = "cm")
 
     cat("Preview of the first 4 plots are displayed in viewer. \n")
