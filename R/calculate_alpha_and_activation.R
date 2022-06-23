@@ -26,6 +26,10 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
+  if(any(is.na(data$correct))){
+    stop("There are missing values in the column 'correct', replace missing values with boolean values.")
+  }
+
   if(-1 %in% data$factId){
     data <- resetremoval(data)
     cat("- There are resets present in the data. Reset data is removed. - \n")
