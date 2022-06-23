@@ -32,7 +32,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
     stop("ylim must be a vector of 2")
   }
 
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "reactionTime", "correct", "lessonId", "userId", "presentationStartTime"))
+  missingcol <- missing_columns_check(data, c("sessionId", "factId", "reactionTime", "correct", "lessonId", "userId", "presentationStartTime", "lessonTitle"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -66,7 +66,7 @@ individual_RT <- function(data, session = NULL, normalizeTime = FALSE, logarithm
   plots4 <- list()
 
   # Determine axis
-  sessiongroup <- dplyr::group_by(data, sessionId)
+  sessiongroup <- dplyr::group_by(data, userId, sessionId)
   sessiontimes <- dplyr::summarise(sessiongroup, times = (max(presentationStartTime, na.rm = TRUE) - min(presentationStartTime, na.rm = TRUE))/60000)
   maxTime <- max(sessiontimes$times, na.rm = TRUE)
   if(is.null(xlim)){
