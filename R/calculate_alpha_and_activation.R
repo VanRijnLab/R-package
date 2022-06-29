@@ -21,7 +21,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   if(missing(data)){
     stop("No data is provided")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct", "lessonId"))
+  missingcol <- missing_columns_check(data, c("factId", "factText", "userId", "presentationStartTime","reactionTime", "correct", "lessonId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -35,7 +35,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
     cat("- There are resets present in the data. Reset data is removed. - \n")
   }
 
-  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
+  missing_values_message(data, c("factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
 
   cat("This may take a few minutes... \n")
 
@@ -156,7 +156,7 @@ calculate_activation_from_encounters <- function (encounters, time) {
 
 
 estimate_alpha <- function (encounters, activation, response, previous_alpha, factalpha) {
-  if (length(encounters) < 3) {
+  if (length(encounters) < 4) {
     return (factalpha)
   }
 
