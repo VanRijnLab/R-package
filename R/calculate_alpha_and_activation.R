@@ -26,14 +26,37 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
-  if(any(is.na(data$correct))){
-    stop("There are missing values in the column 'correct', replace missing values with boolean values.")
+  existing_alpha <- c("alpha", "activation")
+  strCols <- paste(existing_alpha,collapse=" ")
+  alpha_flag <- FALSE
+
+  missingcols <- character(0)
+  for(col in existing_alpha){
+    if(col %in% colnames(data)){
+      alpha_flag <- TRUE
+    }
   }
+  if(alpha_flag){
+    cat("The column 'alpha' and/or 'activation' is already present in the dataset. \n Are you sure you want to overwrite these columns? \n enter 1 to proceed and overwrite \n enter 0 to exit \n")
+    answer <- readline(prompt="Input: ")
+    if(suppressWarnings(all(is.na(as.numeric((answer)))))|| as.numeric(answer)!=1){
+      cat("\n Exit completed")
+      return(data)
+    }
+  }
+  data <- select(data, -dplyr::any_of(c("alpha", "activation")))
+
 
   if(-1 %in% data$factId){
     data <- resetremoval(data)
     cat("- There are resets present in the data. Reset data is removed. - \n")
   }
+
+  if(any(is.na(data$correct))){
+    stop("There are missing values in the column 'correct', replace missing values with boolean values.")
+  }
+
+
 
   missing_values_message(data, c("factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
 
