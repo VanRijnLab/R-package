@@ -99,6 +99,17 @@ If you want to use the example data set you must set the example parameter to TR
 data <- read_dataset_excel(exampleset = TRUE)
 ```
 
+It can occur that you will see the message
+```{r, eval= FALSE}
+# Not run
+- Reset entries have been found, presentationStartTime is being estimated. -
+```
+in the console after running the `read_dataset_excel()` function. This means that there are reset entries in the data set. These entries contain a usual userId, sequence_number and lessonId and also contain a factId of -1, but no other data. These entries are added to the database anytime a user chooses to reset one of the lessons they have done and will reset the alpha, activation and learnt facts for that user. 
+
+Since these entries contain no other data the presentationStartTime must be estimated. [Explanation here]
+
+
+
 
 ## First look
 The function `dataset_stats()` gives a quick summary of the data set. It is easiest to save the output in a variable, so the participant table can be accessed later on. Because this table can be very long it is not printed in the standard output.
