@@ -101,13 +101,11 @@ data <- read_dataset_excel(exampleset = TRUE)
 
 It can occur that you will see the message
 ```{r, eval= FALSE}
-# Not run
 - Reset entries have been found, presentationStartTime is being estimated. -
 ```
 in the console after running the `read_dataset_excel()` function. This means that there are reset entries in the data set. These entries contain a usual userId, sequence_number and lessonId and also contain a factId of -1, but no other data. These entries are added to the database anytime a user chooses to reset one of the lessons they have done and will reset the alpha, activation and learnt facts for that user. 
 
-Since these entries contain no other data the presentationStartTime must be estimated. [Explanation here]
-
+Since these entries contain no other data the presentationStartTime must be estimated. These estimated presentationStartTime values don't represent the actual time at which the lesson was reset, but are instead fabricated to make sure that the presentationStartTime occurs after all the trials that need to be forgotten and before any trials that were learnt by the user after the reset. For this process that sequence_number of the trials is used to determine the order in which trials and the reset occurred. 
 
 
 
