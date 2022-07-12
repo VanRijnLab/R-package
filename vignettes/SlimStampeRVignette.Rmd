@@ -168,7 +168,7 @@ individual_RT(data, filepath = path)
 There is also the option to print only one session for both this RT function and the individual ROF function mentioned below:
 
 ```{r}
-individual_RT(data, sessionId = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
+individual_RT(data, session = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
 ```
 
 
