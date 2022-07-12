@@ -171,6 +171,10 @@ There is also the option to print only one session for both this RT function and
 individual_RT(data, session = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
 ```
 
+Sometimes it is easier to view the data on a logarithmic scale. To do so, you can set the logartihmic parameter to TRUE:
+```{r}
+individual_RT(data, session = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6", filepath = path, logarithmic = TRUE)
+```
 
 ## Rate of Forgetting
 
