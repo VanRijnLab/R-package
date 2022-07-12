@@ -108,7 +108,7 @@ individual_ROF <- function(data, session = NULL, normalizeTime = FALSE, xlim = N
 
   # Plot graphs
   data_plots <- NULL
-  data_plots <- split_data %>% purrr::map(~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = alpha)) +
+  data_plots <- purrr::map(split_data, ~ ggplot2::ggplot(data = ., ggplot2::aes(x = time, y = alpha)) +
                                             ggplot2::geom_line(alpha = 1, ggplot2::aes(colour = factor(factId))) +
                                             ggplot2::geom_point(alpha = 1, size = 1.5, stroke = 0, pch = 21, ggplot2::aes(fill = correct)) +
                                             ggplot2::guides(colour = "none", fill = "none") +

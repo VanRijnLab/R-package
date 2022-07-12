@@ -44,7 +44,7 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
       return(data)
     }
   }
-  data <- select(data, -dplyr::any_of(c("alpha", "activation")))
+  data <- dplyr::select(data, -dplyr::any_of(c("alpha", "activation")))
 
 
   if(-1 %in% data$factId){
