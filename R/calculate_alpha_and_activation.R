@@ -179,7 +179,7 @@ calculate_activation_from_encounters <- function (encounters, time) {
 
 
 estimate_alpha <- function (encounters, activation, response, previous_alpha, factalpha) {
-  if (length(encounters) < 4) {
+  if (length(encounters) < 3) {
     return (factalpha)
   }
 
