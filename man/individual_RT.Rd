@@ -8,6 +8,7 @@ individual_RT(
   data,
   session = NULL,
   normalizeTime = FALSE,
+  logarithmic = FALSE,
   xlim = NULL,
   ylim = NULL,
   filepath = NULL
@@ -22,6 +23,9 @@ sessionId is NULL all sessions will be plotted.}
 \item{normalizeTime}{If TRUE, the times of all facts will be normalized (they
 will start at 0). If FALSE, the times will not be normalized and data
 points will occur relative to their occurrence during the session.}
+
+\item{logarithmic}{If TRUE, the x-axis will be logarithmic. If FALSE (the
+default), the x-axis will have a linear scale.}
 
 \item{xlim}{A vector of 2 (for example: c(0, 10)), indicating the range of
 the x-axis.If NULL the default value is used: c(0, z). Where z is the max

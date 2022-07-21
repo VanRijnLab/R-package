@@ -6,8 +6,8 @@
 #' @family individual functions
 #'
 #' @param data A data frame. NA values will be removed before plotting.
-#' @param sessionId Provide a single sessionId string to plot that session. If
-#'   sessionId is NULL all sessions will be plotted.
+#' @param session Provide a single sessionId string to plot that session. If
+#'   session is NULL all sessions will be plotted.
 #' @param normalizeTime If TRUE, the times of all facts will be normalized (they
 #'   will start at 0). If FALSE, the times will not be normalized and data
 #'   points will occur relative to their occurrence during the session.

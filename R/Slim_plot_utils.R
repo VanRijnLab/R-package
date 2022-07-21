@@ -50,6 +50,7 @@ title_time <- function() {
   return (format(Sys.time(), "%d-%b-%Y_%Hh%Mm%Ss"))
 }
 
+# removes all data before the last user reset
 resetremoval <- function(df) {
   dfgroup <- dplyr::group_by(df, lessonId, userId)
   dfsort <- dplyr::arrange(dfgroup, presentationStartTime, .by_group = TRUE)
@@ -60,6 +61,7 @@ resetremoval <- function(df) {
   return(dffree)
 }
 
+#Only the first session of a user within a lesson is kept in the data
 firstsession <- function(df) {
   dfgroup <- dplyr::group_by(df, lessonId, userId)
   dfsort <- dplyr::arrange(dfgroup, presentationStartTime, .by_group = TRUE)
@@ -68,7 +70,8 @@ firstsession <- function(df) {
   return(dffree)
 }
 
-ms_to_string <- function(time) { #makes time in ms human-readable
+#makes time in ms human-readable
+ms_to_string <- function(time) {
   if(is.na(time)){
     return(paste("None"))
   } else if(time<1000){
