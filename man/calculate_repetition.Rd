@@ -10,11 +10,12 @@ calculate_repetition(data)
 \item{data}{A data frame}
 }
 \value{
-Original data frame with column for repetition
+Original data frame with column for repetition, without reset data.
 }
 \description{
-Returns the data frame with a column for fact repetition for all trials. This will
-override existing columns called 'repetition'.
+Returns the data frame with a column for fact repetition for all trials. This
+will override existing columns called 'repetition'. This data frame will not
+contain any data that has been reset.
 }
 \seealso{
 Other calculation functions: 

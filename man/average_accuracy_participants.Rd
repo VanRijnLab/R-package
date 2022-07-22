@@ -18,10 +18,12 @@ the y-axis.If NULL the default value is used: c(0, 1).}
 \item{filepath}{A relative or explicit path where plots will be saved}
 }
 \value{
-Plot of accuracy over repetition, with every line a participant and a pdf file in filepath
+Plot of accuracy over repetition, with every line a session and a
+pdf file in filepath
 }
 \description{
-Plots the average accuracy of every session over the repetitions of the facts.
+Plots the average accuracy of the first session of every participant in a
+lesson over the repetitions of the facts.
 }
 \details{
 Assumes that the data set has a repetition column with fact repetition in

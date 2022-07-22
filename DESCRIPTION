@@ -1,6 +1,6 @@
 Package: SlimStampeRData
 Title: Analyze SlimStampen App Data
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Han", "Havinga", , "h.m.havinga@gmail.com", role = c("aut", "cre")),
     person("Rijksuniversiteit Groningen", role = "cph"))
@@ -25,5 +25,9 @@ Imports:
     cowplot,
     viridis,
     utils,
-    bit64
+    bit64,
+    readxl,
+    jsonlite,
+    rjson,
+    scales
 VignetteBuilder: knitr

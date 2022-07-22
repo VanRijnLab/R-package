@@ -1,7 +1,8 @@
 #' Calculate fact activation and alpha (rate of forgetting)
 #'
-#' Returns the data frame with a column for activation and alpha for all trials. This will
-#' override existing columns called 'alpha' or 'activation'.
+#' Returns the data frame with a column for activation and alpha for all trials.
+#' This will override existing columns called 'alpha' or 'activation'. This data
+#' frame will not contain any data that has been reset.
 #'
 #' @family calculation functions
 #'
@@ -11,7 +12,8 @@
 #' @param fThreshold Threshold below which the user forgets a fact
 #' @param standardAlpha The default alpha that all items start with
 #'
-#' @return Original data frame with columns for activation and alpha
+#' @return Original data frame with columns for activation and alpha, without
+#'   reset data
 #' @export
 #'
 calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
@@ -19,42 +21,97 @@ calculate_alpha_and_activation <- function(data, minAlpha = 0.15,
   if(missing(data)){
     stop("No data is provided")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
+  missingcol <- missing_columns_check(data, c("factId", "factText", "userId", "presentationStartTime","reactionTime", "correct", "lessonId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
-  missing_values_message(data, c("sessionId", "factId", "factText", "userId", "sessionTime","reactionTime", "correct"))
-  cat("This may take a moment... \n")
+
+  existing_alpha <- c("alpha", "activation")
+  strCols <- paste(existing_alpha,collapse=" ")
+  alpha_flag <- FALSE
+
+  missingcols <- character(0)
+  for(col in existing_alpha){
+    if(col %in% colnames(data)){
+      alpha_flag <- TRUE
+    }
+  }
+  if(alpha_flag){
+    cat("The column 'alpha' and/or 'activation' is already present in the dataset. \n Are you sure you want to overwrite these columns? \n enter 1 to proceed and overwrite \n enter 0 to exit \n")
+    answer <- readline(prompt="Input: ")
+    if(suppressWarnings(all(is.na(as.numeric((answer)))))|| as.numeric(answer)!=1){
+      cat("\n Exit completed")
+      return(data)
+    }
+  }
+  data <- dplyr::select(data, -dplyr::any_of(c("alpha", "activation")))
 
 
-  participants <- unique(data$sessionId)
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is removed. - \n")
+  }
+
+  if(any(is.na(data$correct))){
+    stop("There are missing values in the column 'correct', replace missing values with boolean values.")
+  }
+
+
+
+  missing_values_message(data, c("factId", "factText", "userId", "presentationStartTime","reactionTime", "correct"))
+
+  cat("This may take a few minutes... \n")
+
+
+
+  lessons <- unique(data$lessonId)
+  totalLessons <- length(lessons)
   datalistTotal = list()
 
-  for (j in seq_along(participants)) {
-    datalistPar = list()
-    dat1 <- dplyr::filter(data, sessionId == participants[j])
-    facts <- unique(dat1$factId)
-    dat1 <- dplyr::arrange(.data = dat1, sessionTime)
-    dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
-                          fact_id = factId, text = factText, start_time = sessionTime,
-                          rt = reactionTime, correct = correct)
-    for (i in seq_along(facts)) {
-      datfact <- dplyr::filter(dat1, factId == facts[i])
-      alpha_activation <- calculate_activation_and_alpha_all(id = facts[i], factalpha = standardAlpha,
-                                                             responses = dat2, min_alpha = minAlpha,
-                                                             max_alpha = maxAlpha)
-      datfact$alpha <- alpha_activation$alpha
-      datfact$activation <- alpha_activation$activation
-      datalistPar[[i]] <- datfact
+  cat("Progress:")
+  for (k in seq_along(lessons)) {
+    lessondata <- dplyr::filter(data, lessonId == lessons[k])
+    participants <- unique(lessondata$userId)
+    datalistless = list()
+    totalPart <- length(participants)
+    if(k != 1) {cat("Done!")}
+    cat("\n Analysing", k, "out of", totalLessons, "lessons (", totalPart ,"users ) \n")
+    cat("0 % ...")
+
+    for (j in seq_along(participants)) {
+      if(totalPart<100){
+        if(j%%5 == 0) {cat(round((j/totalPart)*100),"% ...")}
+      } else {
+        if(j%%10 == 0) {cat(round((j/totalPart)*100),"% ...")}
+      }
+
+
+      datalistPar = list()
+      dat1 <- dplyr::filter(lessondata, userId == participants[j])
+      facts <- unique(dat1$factId)
+      dat1 <- dplyr::arrange(.data = dat1, presentationStartTime)
+      dat2 <- dplyr::mutate(.data = dat1, .keep = "none", threshold = fThreshold,
+                            fact_id = factId, text = factText, start_time = presentationStartTime,
+                            rt = reactionTime, correct = correct)
+      for (i in seq_along(facts)) {
+        datfact <- dplyr::filter(dat1, factId == facts[i])
+        alpha_activation <- calculate_activation_and_alpha_all(id = facts[i], factalpha = standardAlpha,
+                                                               responses = dat2, min_alpha = minAlpha,
+                                                               max_alpha = maxAlpha)
+        datfact <- cbind(datfact, alpha_activation)
+        datalistPar[[i]] <- datfact
+      }
+      datParticipant <- data.table::rbindlist(datalistPar)
+      datalistless[[j]] <- datParticipant
     }
-    datParticipant <- data.table::rbindlist(datalistPar)
-    datalistTotal[[j]] <- datParticipant
+    datlesson <- data.table::rbindlist(datalistless)
+    datalistTotal[[k]] <- datlesson
+
   }
   datTotal <- data.table::rbindlist(datalistTotal)
-  datSortTime <- datTotal[with(datTotal, order(sessionTime)),]
-  datSortParticipant <- datSortTime[with(datSortTime, order(sessionId)),]
-  cat("Done! \n")
-  return(datSortParticipant)
+  datSortTime <- datTotal[with(datTotal, order(presentationStartTime)),]
+  cat("\n All Done! \n")
+  return(datSortTime)
 
 }
 

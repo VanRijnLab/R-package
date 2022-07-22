@@ -17,8 +17,11 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-This package is used to analyze SlimStampen App data. To use this package you need a .csv file with the data from the SlimStampen lessons that you want to analyze. 
+This package is used to analyze SlimStampen App data. To use this package you need a .csv file or a set of .xlsx files with the data from the SlimStampen lessons that you want to analyze. Below will be explained how to import data from CSV and Excel files.
+
 The functions in this package are focused on giving a general overview of what the data looks like, not to provide specific statistical analyses.
+
+It should be noted that the calculation of alpha estimates is accurate when each user has at most one session in a lesson, but cannot be guaranteed when when users have several sessions or any lesson reset has been used. 
 
 To use this package you first need to call the `library()` function to load the package into your RStudio environment.
 
@@ -48,7 +51,7 @@ help(package = "SlimStampeRData")
 You may run into warning or error messages when you run the code in this vignette. At the end of this vignette is a section with common warning and error messages and their solutions.
 
 
-## Read data 
+## Read data from CSV file
 The `read_dataset()` function reads the data from your .csv file into RStudio, so you can use it as a data table. The `read_dataset()` function needs the location of the .csv file to be able to read it.
 
 ```{r, eval= FALSE}
@@ -63,6 +66,48 @@ When no location is given the example data set is used.
 ```{r}
 data <- read_dataset()
 ```
+
+
+## Read data from Excel files
+The `read_dataset_excel()` function reads the data from your .xlsx files into RStudio, so you can use it as a data table. The `read_dataset_excel()` function needs the location of the .xlsx files to be able to read them.
+There are two ways to provide the location of your Excel files, individually or by directory.
+
+If you provide the files individually you must provide the file path to three files: the response entries, the lesson data and the fact data. You must also provide the lesson Id's of the lessons you want to parse.
+
+```{r, eval= FALSE}
+# Not run
+# Example of possible individual Excel files locations
+data <- read_dataset_excel(lessons = c(23, 45), file_response = "C:/Users/YourName/x_response.xlsx", file_lesson = "C:/Users/YourName/x_lesson.xlsx", file_fact = "C:/Users/YourName/x_fact.xlsx")
+```
+
+If you provide a directory the three files will be selected automatically. However, for this to work correctly the files must end on "fact.xlsx", "lesson.xlsx" and "response.xlsx". There must also be only one file present in the directory that ends on each of these strings, otherwise the wrong file may be selected. If the files don't end on these strings or the files are not present in the same directory, then you must provide the file paths separately, as in the example above.
+
+When you provide a directory you must also provide the lesson Id's of the lessons you want to parse.
+
+
+```{r, eval= FALSE}
+# Not run
+# Example of Excel files directory location
+data <- read_dataset_excel(lessons = c(23, 45), file_dir = "C:/Users/YourName/dataFolder")
+```
+
+
+If you want to use the example data set you must set the example parameter to TRUE.
+
+```{r, eval= FALSE}
+# Not run
+data <- read_dataset_excel(exampleset = TRUE)
+```
+
+It can occur that you will see the message
+```{r, eval= FALSE}
+- Reset entries have been found, presentationStartTime is being estimated. -
+```
+in the console after running the `read_dataset_excel()` function. This means that there are reset entries in the data set. These entries contain a usual userId, sequence_number and lessonId and also contain a factId of -1, but no other data. These entries are added to the database anytime a user chooses to reset one of the lessons they have done and will reset the alpha, activation and learnt facts for that user. 
+
+Since these entries contain no other data the presentationStartTime must be estimated. These estimated presentationStartTime values don't represent the actual time at which the lesson was reset, but are instead fabricated to make sure that the presentationStartTime occurs after all the trials that need to be forgotten and before any trials that were learnt by the user after the reset. For this process that sequence_number of the trials is used to determine the order in which trials and the reset occurred. 
+
+
 
 ## First look
 The function `dataset_stats()` gives a quick summary of the data set. It is easiest to save the output in a variable, so the participant table can be accessed later on. Because this table can be very long it is not printed in the standard output.
@@ -123,9 +168,13 @@ individual_RT(data, filepath = path)
 There is also the option to print only one session for both this RT function and the individual ROF function mentioned below:
 
 ```{r}
-individual_RT(data, sessionId = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
+individual_RT(data, session = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6",filepath = path)
 ```
 
+Sometimes it is easier to view the data on a logarithmic scale. To do so, you can set the logartihmic parameter to TRUE:
+```{r}
+individual_RT(data, session = "7f27ee3c-2e6b-42a4-aff1-ba2492008ab6", filepath = path, logarithmic = TRUE)
+```
 
 ## Rate of Forgetting
 
@@ -158,7 +207,7 @@ individual_ROF(data, filepath = path)
 
 ***
 # Average of participants
-There are three functions that plot an average for a variable over all participants. These functions give a plot as output in which all lines represent a participant. On the x-axis the repetitions of facts is used. This is the amount of times that a fact has been presented to the participant.
+There are three functions that plot an average for a variable over all participants. For this average only the first session of every participant in every session is used, as to exclude any effects that can stem from the breaks between sessions. These functions give a plot as output in which all lines represent a session. On the x-axis the repetitions of facts is used. This is the amount of times that a fact has been presented to the participant.
 
 These functions give an error if your data set does not have a column with the number of repetition for each trial.
 
@@ -194,7 +243,7 @@ average_ROF_participants(data, filepath = path)
 
 ***
 # Average of facts
-There is one function that plots the average Rate of Forgetting over all facts. This function gives a plot as output in which all lines represent a fact.
+There is one function that plots the average Rate of Forgetting over all facts. This function gives a plot as output in which all lines represent a fact. Just like in the previous section, this function also uses the first session for every participant in a session to calculate the average.
 
 This function gives an error if your data set does not have a column with the number of repetition for each trial. See the section 'Average of participants' for more information.
 
@@ -239,8 +288,7 @@ warnings()
 ```
 
 ### Removed XX rows containing missing values (geom_point/geom_path)
-There are NA values in your data set. The plots for the sessionIds that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed after the function should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
-It is preferred to deal with NA values in some way, either removing them (if this makes sense in the data and methodology) or replacing them. For example, for a missing reaction time it is common to replace this NA value with the average reaction time of the participant or the maximum reaction time.
+There are NA values in your data set. The plots for the individual sessions that contain NA values are still printed, but the rows that contain a NA value are removed and not printed as a data point. The first line that is printed in the console after the function is called should clarify which column contains NA values. Having NA values in your data can also lead to the axis of the plots being printed in unexpected ways. 
 
 
 ### Error in grDevices::pdf(file = filename, ..., version = version) : cannot open file 'C:/example/file/path/filename.pdf'

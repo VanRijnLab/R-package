@@ -1,6 +1,7 @@
 #' Plot average RT of all participants over repetitions
 #'
-#' Plots the average RT of every session over the repetitions of the facts.
+#' Plots the average RT of the first session of every participant in every
+#' lesson over the repetitions of the facts.
 #'
 #' Assumes that the data set has a repetition column with fact repetition in
 #' integers
@@ -15,7 +16,8 @@
 #'   minimum reaction time and b is the average reaction time plus the standard
 #'   deviation of the reaction time.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return Plot of RT over repetition, with every line a participant and a pdf file in filepath
+#' @return Plot of RT over repetition, with every line a session and a pdf
+#'   file in filepath
 #' @export
 average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
@@ -24,7 +26,7 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
   if(!("repetition" %in% colnames(data))){
     stop("No repetition column is provided in the data, run calculate_repetition() to add a repetition column to the data")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "reactionTime", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "reactionTime", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -36,14 +38,21 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
     stop("ylim must be a vector of 2")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "reactionTime", "repetition"))
+
+  data <- firstsession(data)
 
   participants <- sort(unique(data$sessionId))
   partcolor <- viridis::turbo(length(participants))
   names(partcolor)  <- participants
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("Average RT for every participant over repetition")
+  plotTitle <- paste("Average RT for first session of every participant over repetitions")
   plot <- NULL
 
   # Group by sessionId and repetition, then mean reaction time as new column
@@ -81,7 +90,8 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
 
 #' Plot average rate of forgetting of all participants over repetitions
 #'
-#' Plots the average rate of forgetting (alpha) of every session over the repetitions of the facts.
+#' Plots the average rate of forgetting (alpha) of the first session of every
+#' participant in a lesson over the repetitions of the facts.
 #'
 #' Assumes that the data set has a repetition column with fact repetition in
 #' integers and a column with the alpha's for all observations
@@ -94,7 +104,8 @@ average_RT_participants <- function(data, xlim = NULL, ylim = NULL, filepath = N
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used.
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return Plot of Alpha over repetition, with every line a participant and a pdf file in filepath
+#' @return Plot of Alpha over repetition, with every line a session and a
+#'   pdf file in filepath
 #' @export
 average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
@@ -106,7 +117,7 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
   if(!("alpha" %in% colnames(data))){
     stop("No alpha column is provided in the data, run calculate_alpha_and_activation() to add an alpha column to the data")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
@@ -118,14 +129,21 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
     stop("ylim must be a vector of 2")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "alpha", "repetition"))
+
+  data <- firstsession(data)
 
   participants <- sort(unique(data$sessionId))
   partcolor <- viridis::turbo(length(participants))
   names(partcolor)  <- participants
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("Average ROF for every participant over repetition")
+  plotTitle <- paste("Average ROF for first session of every participant over repetitions")
   plot <- NULL
 
   # Group by sessionId and repetition, then mean alpha as new column
@@ -162,7 +180,8 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
 
 #' Plot average accuracy of all participants over repetitions
 #'
-#' Plots the average accuracy of every session over the repetitions of the facts.
+#' Plots the average accuracy of the first session of every participant in a
+#' lesson over the repetitions of the facts.
 #'
 #' Assumes that the data set has a repetition column with fact repetition in
 #' integers
@@ -175,7 +194,8 @@ average_ROF_participants <- function(data, xlim = NULL, ylim = NULL, filepath = 
 #' @param ylim A vector of 2 (for example: c(0, 1000)), indicating the range of
 #'   the y-axis.If NULL the default value is used: c(0, 1).
 #' @param filepath A relative or explicit path where plots will be saved
-#' @return Plot of accuracy over repetition, with every line a participant and a pdf file in filepath
+#' @return Plot of accuracy over repetition, with every line a session and a
+#'   pdf file in filepath
 #' @export
 average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepath = NULL) {
   if(missing(data)){
@@ -190,12 +210,19 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition"))
+  missingcol <- missing_columns_check(data, c("sessionId", "correct", "repetition", "lessonId", "userId", "presentationStartTime", "factId"))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "correct", "repetition"))
+
+  data <- firstsession(data)
 
   participants <- sort(unique(data$sessionId))
   partcolor <- viridis::turbo(length(participants))
@@ -210,7 +237,7 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
   }
 
   cat("This may take a moment... \n")
-  plotTitle <- paste("Average Accuracy for every participant over repetition")
+  plotTitle <- paste("Average Accuracy for first session of every participant over repetitions")
   plot <- NULL
 
   # Group by sessionId and repetition, then mean accuracy as new column
@@ -244,8 +271,8 @@ average_accuracy_participants <- function(data, xlim = NULL, ylim = NULL, filepa
 
 #' Plot average rate of forgetting over repetitions for each fact
 #'
-#' Plots the average rate of forgetting (alpha) for each fact over the
-#' repetitions of the facts.
+#' Plots the average rate of forgetting (alpha) of the first session for each
+#' fact over the repetitions of the facts.
 #'
 #' Assumes that the data set has a repetition column with fact repetition in
 #' integers and a column with the alpha's for all observations.
@@ -294,15 +321,22 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
   if(!(is.null(ylim) | length(ylim) == 2)){
     stop("ylim must be a vector of 2")
   }
-  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", factNames))
+  missingcol <- missing_columns_check(data, c("sessionId", "alpha", "repetition", "factId", "lessonId", "userId", "presentationStartTime", factNames))
   if(length(missingcol) > 0){
     stop("No ", missingcol[[1]] ," column is provided in the data")
   }
 
+  if(-1 %in% data$factId){
+    data <- resetremoval(data)
+    cat("- There are resets present in the data. Reset data is excluded in this function. - \n")
+  }
+
   missing_values_message(data, c("sessionId", "alpha", "repetition", "factId", factNames))
 
+  data <- firstsession(data)
+
   cat("This may take a moment... \n")
-  plotTitle <- paste("Average ROF for every fact over repetition")
+  plotTitle <- paste("Average ROF for first session with every fact over repetitions")
   plot <- NULL
 
   facts <- sort(unique(data$factId))
@@ -329,6 +363,8 @@ average_ROF_facts <- function(data, factNames = "factId", xlim = NULL, ylim = NU
     ggplot2::guides(fill = "none") +
     ggplot2::coord_cartesian(xlim = x, ylim = y) +
     ggplot2::labs(x = "Fact Repetitions", y = "Alpha") +
+    ggplot2::theme(legend.position="right") +
+    ggplot2::guides(colour=ggplot2::guide_legend(nrow=18, byrow=FALSE)) +
     ggplot2::ggtitle(plotTitle)
 
   # Save plot to a pdf file

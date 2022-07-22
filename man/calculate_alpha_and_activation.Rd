@@ -24,11 +24,13 @@ calculate_alpha_and_activation(
 \item{standardAlpha}{The default alpha that all items start with}
 }
 \value{
-Original data frame with columns for activation and alpha
+Original data frame with columns for activation and alpha, without
+reset data
 }
 \description{
-Returns the data frame with a column for activation and alpha for all trials. This will
-override existing columns called 'alpha' or 'activation'.
+Returns the data frame with a column for activation and alpha for all trials.
+This will override existing columns called 'alpha' or 'activation'. This data
+frame will not contain any data that has been reset.
 }
 \seealso{
 Other calculation functions: 

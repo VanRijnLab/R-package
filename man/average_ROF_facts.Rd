@@ -31,8 +31,8 @@ Plot of Alpha over repetition, with every line a fact and a pdf file
 in filepath
 }
 \description{
-Plots the average rate of forgetting (alpha) for each fact over the
-repetitions of the facts.
+Plots the average rate of forgetting (alpha) of the first session for each
+fact over the repetitions of the facts.
 }
 \details{
 Assumes that the data set has a repetition column with fact repetition in
